@@ -1,0 +1,21 @@
+{
+  "name": "IntelliWeather.js",
+  "description": "A jQuery plugin for the IntelliWeather ImageSuite API.",
+  "author": {
+    "name": "IntelliWeather, Inc.",
+    "url": "http://www.intelliweather.com"
+  },
+  "version": "0.0.0",
+  "devDependencies": {
+    "browser-sync": "^2.2.1",
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-footer": "^1.0.5",
+    "gulp-header": "^1.2.2",
+    "gulp-jshint": "^1.9.2",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglifyjs": "^0.6.0",
+    "jshint-stylish": "^1.0.1"
+  }
+}

@@ -35,7 +35,7 @@ gulp.task('watch', function() {
 
   gulp.watch(['test/index.html', 'test/*.css', 'test/*.js'], function() {
     return gulp.src(['test/index.html', 'test/*.css', 'test/*.js'])
-               .pipe(reload({string:true}));
+               .pipe(reload({stream:true}));
   });
 });
 

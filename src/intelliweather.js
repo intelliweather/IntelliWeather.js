@@ -10,8 +10,9 @@ var IntelliWeather = (function() {
     o = o || {};
 
     this.$container = o.container;
-
-    this.$container.text('PLACEHOLDER TEXT');
+    this.descriptor = o.descriptor;
+	
+	this.$container.text('PLACEHOLDER TEXT');
   }
 
   return IntelliWeather;

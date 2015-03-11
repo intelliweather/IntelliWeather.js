@@ -8,12 +8,13 @@
 
   var dataKey = 'iw';
 
-  $.fn.intelliWeather = function() {
+  $.fn.intelliWeather = function(o) {
     return this.each(function() {
       var $container = $(this);
 
       var intelliWeather = new IntelliWeather({
-        container: $container
+        container: $container,
+        descriptor: o
       });
 
       $container.data(dataKey, intelliWeather);

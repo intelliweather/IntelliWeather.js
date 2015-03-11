@@ -33,8 +33,8 @@ gulp.task('watch', function() {
                .pipe(reload({stream:true}));
   }]);
 
-  gulp.watch(['test/index.html', 'test/*.css', 'test/*.js'], function() {
-    return gulp.src(['test/index.html', 'test/*.css', 'test/*.js'])
+  gulp.watch(['test/index.html', 'test/**/*.css', 'test/**/*.js'], function() {
+    return gulp.src(['test/index.html', 'test/**/*.css', 'test/**/*.js'])
                .pipe(reload({stream:true}));
   });
 });

@@ -23,6 +23,9 @@ var banner = [
 ].join('\n');
 
 var bundle = [
+  'src/utils.js',
+  'src/query_string.js',
+  'src/poller.js',
   'src/intelliweather.js',
   'src/plugin.js'
 ];

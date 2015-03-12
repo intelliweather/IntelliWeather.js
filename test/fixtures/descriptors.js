@@ -10,7 +10,7 @@ fixtures.descriptors = {
         768,
         884
       ],
-      layers: [
+      watermarks: [
         '1_IntelliWeather'
       ],
       mode: 'max',
@@ -30,7 +30,7 @@ fixtures.descriptors = {
   series: {
     channel: 5,
     commands: {
-      layers: [
+      watermarks: [
         '1_IntelliWeather'
       ],
       mode: 'max',

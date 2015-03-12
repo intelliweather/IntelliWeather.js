@@ -28,7 +28,7 @@ var IntelliWeather = (function() {
       var width = Math.min(this.descriptor.displayWidth || dataset.width);
       var height = Math.min(this.descriptor.displayHeight || dataset.height);
       imagePath = queryString.addQuery(imagePath,
-        _.extend({}, { width: width, height: height }));
+        _.extend({}, this.descriptor.commands, { width: width, height: height }));
 
       var that = this;
       $.each(dataset.images, function(index, image) {

@@ -97,7 +97,7 @@ var Poller = (function() {
           images = [];
 
       if (this.descriptor.series) {
-        count = this.descriptor.seriesLength || channelMeta.maxItems;
+        count = this.descriptor.seriesLength || channelMeta.maxItems || that.descriptor.defaultSequenceLength;
       }
       else {
         count = 1;

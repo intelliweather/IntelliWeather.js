@@ -24,6 +24,7 @@ var banner = [
 
 var bundle = [
   'src/utils.js',
+  'src/slider.js',
   'src/query_string.js',
   'src/poller.js',
   'src/intelliweather.js',

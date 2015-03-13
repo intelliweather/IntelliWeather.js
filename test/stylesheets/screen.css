@@ -6,3 +6,22 @@ body {
   position: relative;
   background: #fff url('../images/loading.gif') no-repeat 50% 50%;
 }
+
+.iw-slider {
+  position: relative;
+  *zoom: 1;
+}
+.iw-slider:before,
+.iw-slider:after {
+  content: " ";
+  display: table;
+}
+.iw-slider:after {
+  clear: both;
+}
+.iw-slider-slide {
+  display: none;
+}
+.iw-slider-slide.current {
+  display: block;
+}

@@ -11,6 +11,7 @@ var IntelliWeather = (function() {
 
     this.$container = o.container;
     this.descriptor = _.extend({}, this._defaults, o.descriptor);
+    this.$images = [];
     this.slider = null;
 
     // TODO: Take into account current width and height
@@ -25,12 +26,30 @@ var IntelliWeather = (function() {
   }
 
   _.extend(IntelliWeather.prototype, {
+    _updateTopBar: function updateTopBar(image) {
+      var dateUtc = image.data('timestamp') || '';
+      this.$seriesTitle.text(this.dataset.description || '');
+      this.$subTitle.text(' - ' + _.toAbbRelativeTime(dateUtc - Date.now()));
+      this.$labelFrame.text(' ' + _.padZeroes(image.data('index') + 1) + ' of ' + this.dataset.images.length + '');
+      this.$labelTime.html(image.data('timestamp'));
+    },
 
     _renderImages: function renderImages(dataset) {
       var that = this;
       $.each(dataset.images, function(index, image) {
-        that.$container.append(image.html);
+        that.$container.append(that.$images[image.id]);
       });
+    },
+
+    _renderTopBar: function renderTopBar() {
+      if (this.descriptor.series) {
+        this.$topbar = $(html.topBar).css(css.iwTopBar);
+        this.$seriesTitle = $(html.seriesTitle).appendTo(this.$topbar);
+        this.$subTitle = $(html.subTitle).appendTo(this.$topbar);
+        this.$labelFrame = $(html.labelFrame).appendTo(this.$topbar);
+        this.$labelTime = $(html.labelTime).appendTo(this.$topbar).css(css.iwTime);
+        this.$container.append(this.$topbar);
+      }
     },
 
     _preloadImages: function preloadImages(imagePath, dataset) {
@@ -41,13 +60,13 @@ var IntelliWeather = (function() {
         var d = $.Deferred();
 
         var $img = $('<img />').attr('id', image.id).attr('src', src);
+        $img.data('index', index);
+        $img.data('timestamp', new Date(image.time));
         $img.css({ display: 'none' });
-
         $img.load(function() {
-          image.html = this;
           d.resolveWith(that);
         });
-
+        that.$images[image.id] = $img;
         loaders.push(d.promise());
       });
 
@@ -60,6 +79,7 @@ var IntelliWeather = (function() {
 
     _render: function render(dataset) {
       this.destroy();
+      this.dataset = dataset;
 
       var width = Math.min(this.descriptor.displayWidth || dataset.width);
       var height = Math.min(this.descriptor.displayHeight || dataset.height);
@@ -67,8 +87,10 @@ var IntelliWeather = (function() {
         _.extend({}, this.descriptor.commands, { width: width, height: height }));
 
       this._preloadImages(imagePath, dataset).done(function() {
+        this._renderTopBar();
         this._renderImages(dataset);
         this.slider = new Slider({ container: this.$container });
+        this.slider.addListener('slideChanged', this, this._updateTopBar);
         this.slider.play();
       });
     },
@@ -88,6 +110,8 @@ var IntelliWeather = (function() {
 
     destroy: function destroy() {
       this.$container.empty();
+      this.dataset = null;
+      this.$images = [];
 
       if (this.slider) {
         this.slider.destroy();

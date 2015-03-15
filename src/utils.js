@@ -32,6 +32,31 @@ var _ = (function() {
 
     has: function(obj, key) {
       return obj != null && Object.prototype.hasOwnProperty.call(obj, key);
+    },
+
+    padZeroes: function(str) {
+      str = str.toString();
+
+      while (str.length < 2) {
+        str = '0' + str;
+      }
+
+      return str;
+    },
+
+    toAbbRelativeTime: function(milliseconds) {
+      var secs = Math.abs(milliseconds / 1000);
+      var days = Math.floor(secs / (3600 * 24));
+      secs %= 3600 * 24;
+      var hrs = Math.floor(secs / 3600);
+      secs %= 3600;
+      var mns = Math.floor(secs / 60);
+      secs %= 60;
+
+      return this.padZeroes(days) + 'd ' +
+              this.padZeroes(hrs) + 'h ' +
+              this.padZeroes(mns) + 'm' +
+             (milliseconds < 0 ? ' ago' : ' from now');
     }
   };
 

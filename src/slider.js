@@ -8,8 +8,8 @@ var Slider = (function() {
 
   function Slider(o) {
     this.settings = _.extend({}, this._defaults, o);
-    this.$slider = $(this.settings.wrapper);
-    this.slides = this.$slider.children();
+    this.$container = this.settings.container;
+    this.slides = this.$container.children();
     this.currentSlide = 0;
     this.timer = 0;
 
@@ -17,26 +17,10 @@ var Slider = (function() {
     if(this.settings.startSlide < 0 || this.settings.startSlide >= this.slides.length) {
       this.currentSlide = 0;
     }
-    $(this.slides[this.currentSlide]).addClass('current');
-
-    this._setupPauseOnHover();
+    $(this.slides[this.currentSlide]).css({ display: 'block' });
   }
 
   _.extend(Slider.prototype, {
-    _setupPauseOnHover: function setupPauseOnHover() {
-      if (this.settings.pauseOnHover && this.settings.pauseTime && this.settings.pauseTime > 0) {
-        var that = this;
-        this.$slider.hover(
-          function () {
-            clearTimeout(that.timer);
-          },
-          function () {
-            that._doTimer();
-          }
-        );
-      }
-    },
-
     _doTimer: function doTimer() {
       if (this.settings.pauseTime && this.settings.pauseTime > 0) {
         clearTimeout(this.timer);
@@ -55,9 +39,6 @@ var Slider = (function() {
 
     destroy: function destroy() {
       clearTimeout(this.timer);
-      this.slides.removeClass('current');
-      this.currentSlide = 0;
-      this.slides = null;
     },
 
     prev: function prev() {
@@ -65,8 +46,8 @@ var Slider = (function() {
       if (currentSlide < 0) {
         this.currentSlide = this.slides.length - 1;
       }
-      this.slides.removeClass('current');
-      $(this.slides[this.currentSlide]).addClass('current');
+      this.slides.css({ display: 'none' });
+      $(this.slides[this.currentSlide]).css({ display: 'block' });
       this._doTimer();
     },
 
@@ -75,8 +56,8 @@ var Slider = (function() {
       if (this.currentSlide >= this.slides.length) {
         this.currentSlide = 0;
       }
-      this.slides.removeClass('current');
-      $(this.slides[this.currentSlide]).addClass('current');
+      this.slides.css({ display: 'none' });
+      $(this.slides[this.currentSlide]).css({ display: 'block' });
       this._doTimer();
     },
 

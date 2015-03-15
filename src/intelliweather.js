@@ -26,12 +26,21 @@ var IntelliWeather = (function() {
   }
 
   _.extend(IntelliWeather.prototype, {
+    _formatTimestamp: function formatTimestamp(timeStamp) {
+      var month = _.padZeroes(timeStamp.getMonth() + 1);
+      var day = _.padZeroes(timeStamp.getDate());
+      var year = timeStamp.getFullYear();
+      var hours = _.padZeroes(timeStamp.getHours());
+      var minutes = _.padZeroes(timeStamp.getMinutes());
+      return month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ' UTC';
+    },
+
     _updateTopBar: function updateTopBar(image) {
       var dateUtc = image.data('timestamp') || '';
       this.$seriesTitle.text(this.dataset.description || '');
       this.$subTitle.text(' - ' + _.toAbbRelativeTime(dateUtc - Date.now()));
       this.$labelFrame.text(' ' + _.padZeroes(image.data('index') + 1) + ' of ' + this.dataset.images.length + '');
-      this.$labelTime.html(image.data('timestamp'));
+      this.$labelTime.html(this._formatTimestamp(image.data('timestamp')));
     },
 
     _renderImages: function renderImages(dataset) {

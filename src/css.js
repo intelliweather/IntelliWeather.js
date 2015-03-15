@@ -23,7 +23,7 @@ var css = (function() {
     iwTime: {
       position: 'absolute',
       top: '8px',
-      right: '8px'
+      right: '23px'
     }
   };
 })();

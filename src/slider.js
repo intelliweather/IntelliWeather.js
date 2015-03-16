@@ -13,6 +13,9 @@ var Slider = (function() {
     this.currentSlide = 0;
     this.timer = 0;
     this.listeners = {};
+    this.state = 'paused';
+
+    this._setupControls();
 
     this.currentSlide = this.settings.startSlide;
     if(this.settings.startSlide < 0 || this.settings.startSlide >= this.slides.length) {
@@ -22,6 +25,37 @@ var Slider = (function() {
   }
 
   _.extend(Slider.prototype, {
+    _setupControls: function setupControls() {
+      if (this.slides.length > 1 && this.settings.controlArea && $(this.settings.controlArea).length) {
+        this.$controls = $(html.controls).css(css.iwControls);
+        this.$previousControl = $(html.previousControl).css(css.iwPrevious).appendTo(this.$controls);
+        this.$pausePlayControl = $(html.pausePlayControl).css(css.iwPausePlay).appendTo(this.$controls);
+        this.$nextControl = $(html.nextControl).css(css.iwNext).appendTo(this.$controls);
+
+        var that = this;
+        this.$previousControl.click(function() {
+          that.pause();
+          that.prev();
+        });
+
+        this.$pausePlayControl.click(function() {
+          if (that.state == 'paused') {
+            that.play();
+          }
+          else {
+            that.pause();
+          }
+        });
+
+        this.$nextControl.click(function() {
+          that.pause();
+          that.next();
+        });
+
+        $(this.settings.controlArea).append(this.$controls);
+      }
+    },
+
     _fire: function fire(event, element) {
       if (typeof event == 'string') {
         event = { type: event };
@@ -66,14 +100,16 @@ var Slider = (function() {
 
     prev: function prev() {
       this.currentSlide--;
-      if (currentSlide < 0) {
+      if (this.currentSlide < 0) {
         this.currentSlide = this.slides.length - 1;
       }
       this.slides.css({ display: 'none' });
       var $slide = $(this.slides[this.currentSlide]);
       $slide.css({ display: 'block' });
       this._fire('slideChanged', $slide);
-      this._doTimer();
+      if (this.state === 'play') {
+        this._doTimer();
+      }
     },
 
     next: function next() {
@@ -85,15 +121,25 @@ var Slider = (function() {
       var $slide = $(this.slides[this.currentSlide]);
       $slide.css({ display: 'block' });
       this._fire('slideChanged', $slide);
-      this._doTimer();
+      if (this.state === 'play') {
+        this._doTimer();
+      }
     },
 
     pause: function pause() {
-      clearTimeout(this.timer);
+      if (this.state === 'play' && this.slides.length > 1) {
+        clearTimeout(this.timer);
+        this.state = 'paused';
+        this.$pausePlayControl.removeClass('fa-pause');
+        this.$pausePlayControl.addClass('fa-play');
+      }
     },
 
     play: function play() {
-      if (this.slides.length > 1) {
+      if (this.state === 'paused' && this.slides.length > 1) {
+        this.state = 'play';
+        this.$pausePlayControl.removeClass('fa-play');
+        this.$pausePlayControl.addClass('fa-pause');
         this._doTimer();
       }
     },

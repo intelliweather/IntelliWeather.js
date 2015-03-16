@@ -98,7 +98,10 @@ var IntelliWeather = (function() {
       this._preloadImages(imagePath, dataset).done(function() {
         this._renderTopBar();
         this._renderImages(dataset);
-        this.slider = new Slider({ container: this.$container });
+        this.slider = new Slider({
+          container: this.$container,
+          controlArea: '.iw-topbar'
+        });
         this.slider.addListener('slideChanged', this, this._updateTopBar);
         this.slider.play();
       });

@@ -5,6 +5,8 @@
  */
 
 var html = (function() {
+  'use strict';
+
   return {
     topBar: '<div class="iw-topbar"></div>',
     seriesTitle: '<span class="iw-title"></span>',

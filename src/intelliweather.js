@@ -85,6 +85,9 @@ var IntelliWeather = (function() {
         this.$labelFrame = $(html.labelFrame).appendTo(this.$topbar);
         this.$labelTime = $(html.labelTime).appendTo(this.$topbar).css(css.iwTime);
         this.$container.append(this.$topbar);
+
+        var $firstImage = this.$images[this.dataset.images[0].id];
+        this._updateTopBar($firstImage);
       }
     },
 

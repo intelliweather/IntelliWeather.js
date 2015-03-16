@@ -16,6 +16,7 @@ var html = (function() {
     controls: '<div class="iw-controls"></div>',
     previousControl: '<i class="iw-prev fa fa-backward fa-2x"></i>',
     pausePlayControl: '<i class="iw-pauseplay fa fa-pause fa-2x"></i>',
-    nextControl: '<i class="iw-next fa fa-forward fa-2x"></i>'
+    nextControl: '<i class="iw-next fa fa-forward fa-2x"></i>',
+    overlay: '<div id="overlay"></div>'
   };
 })();

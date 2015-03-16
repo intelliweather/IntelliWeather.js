@@ -26,6 +26,11 @@ var IntelliWeather = (function() {
   }
 
   _.extend(IntelliWeather.prototype, {
+    _modalCompleted: function modalCompleted(modal) {
+      var descriptor = _.extend({}, this.descriptor.expand);
+      modal.intelliWeather(descriptor);
+    },
+
     _formatTimestamp: function formatTimestamp(timeStamp) {
       var month = _.padZeroes(timeStamp.getMonth() + 1);
       var day = _.padZeroes(timeStamp.getDate());
@@ -46,7 +51,29 @@ var IntelliWeather = (function() {
     _renderImages: function renderImages(dataset) {
       var that = this;
       $.each(dataset.images, function(index, image) {
-        that.$container.append(that.$images[image.id]);
+        var $image = that.$images[image.id];
+        if (that.descriptor.series && dataset.images.length > 1) {
+          that.$container.append($image);
+        }
+        else {
+
+          var $modal = $('<div></div>').attr('id', 'modal-' + image.id).css(_.extend({}, css.modal, {
+            width: that.descriptor.expand.displayWidth,
+            height: that.descriptor.expand.displayHeight
+          }));
+          $modal.addClass('iw');
+          $('body').append($modal);
+
+          var $anchor = $('<a></a>').attr('href', '#modal-' + image.id);
+          $anchor.append($image);
+          that.$container.append($anchor);
+
+          var modal = new Modal({
+            anchor: $anchor,
+            top: 200
+          });
+          modal.addListener('onComplete', that, that._modalCompleted);
+        }
       });
     },
 

@@ -7,8 +7,8 @@ fixtures.descriptors = {
       crop: [
         129,
         405,
-        768,
-        884
+        769,
+        885
       ],
       watermarks: [
         '1_IntelliWeather'
@@ -19,11 +19,25 @@ fixtures.descriptors = {
     displayWidth: 160,
     displayHeight: 120,
     series: false,
-    inner: {
+    expand: {
+      channel: 2,
       displayWidth: 640,
       displayHeight: 480,
       series: true,
-      seriesLength: 12
+      seriesLength: 12,
+      commands: {
+        crop: [
+          129,
+          405,
+          769,
+          885
+        ],
+        watermarks: [
+          '1_IntelliWeather'
+        ],
+        mode: 'max',
+        quality: 85
+      }
     },
     onclick: 'popup'
   },

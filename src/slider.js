@@ -9,7 +9,7 @@ var Slider = (function() {
   function Slider(o) {
     this.settings = _.extend({}, this._defaults, o);
     this.$container = this.settings.container;
-    this.slides = this.$container.children('img');
+    this.slides = this.$container.find('img');
     this.currentSlide = 0;
     this.timer = 0;
     this.listeners = {};
@@ -26,7 +26,7 @@ var Slider = (function() {
 
   _.extend(Slider.prototype, {
     _setupControls: function setupControls() {
-      if (this.slides.length > 1 && this.settings.controlArea && $(this.settings.controlArea).length) {
+      if (this.slides.length > 1 && this.settings.controlArea && this.$container.find(this.settings.controlArea).length) {
         this.$controls = $(html.controls).css(css.iwControls);
         this.$previousControl = $(html.previousControl).css(css.iwPrevious).appendTo(this.$controls);
         this.$pausePlayControl = $(html.pausePlayControl).css(css.iwPausePlay).appendTo(this.$controls);
@@ -52,7 +52,7 @@ var Slider = (function() {
           that.next();
         });
 
-        $(this.settings.controlArea).append(this.$controls);
+        this.$container.find(this.settings.controlArea).append(this.$controls);
       }
     },
 

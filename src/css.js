@@ -48,6 +48,23 @@ var css = (function() {
       padding: '8px',
       paddingLeft: '50px',
       paddingRight: '50px'
+    },
+    overlay: {
+      position: 'fixed',
+      zIndex: '100',
+      top: '0px',
+      left: '0px',
+      height: '100%',
+      width: '100%',
+      background: '#000',
+      display: 'none'
+    },
+    modal: {
+      display : 'none',
+      position : 'fixed',
+      opacity : '0',
+      zIndex: '11000',
+      left : '50%'
     }
   };
 })();

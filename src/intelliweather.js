@@ -37,7 +37,12 @@ var IntelliWeather = (function() {
       var year = timeStamp.getFullYear();
       var hours = _.padZeroes(timeStamp.getHours());
       var minutes = _.padZeroes(timeStamp.getMinutes());
-      return month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ' UTC';
+      return month + '/' +
+             day + '/' +
+             year + ' ' +
+             hours + ':' +
+             minutes + ' ' +
+             this.descriptor.timeZone.toUpperCase();
     },
 
     _updateTopBar: function updateTopBar(image) {

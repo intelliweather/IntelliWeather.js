@@ -25,6 +25,7 @@ fixtures.descriptors = {
       displayHeight: 480,
       series: true,
       seriesLength: 12,
+      timeZone: 'utc',
       commands: {
         crop: [
           129,
@@ -53,6 +54,7 @@ fixtures.descriptors = {
     displayWidth: 640,
     displayHeight: 480,
     series: true,
-    seriesLength: 12
+    seriesLength: 12,
+    timeZone: 'utc'
   }
 };

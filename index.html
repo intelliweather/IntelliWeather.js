@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="IntelliWeather.js : A jQuery plugin for building robust weather pages using the IntelliWeather Image API.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>IntelliWeather.js</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/intelliweather/IntelliWeather.js">View on GitHub</a>
+
+          <h1 id="project_title">IntelliWeather.js</h1>
+          <h2 id="project_tagline">A jQuery plugin for building robust weather pages using the IntelliWeather Image API.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/intelliweather/IntelliWeather.js/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/intelliweather/IntelliWeather.js/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="intelliweatherjs" class="anchor" href="#intelliweatherjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>intelliweather.js</h1>
+
+<p>Created by <a href="http://www.intelliweather.com/">IntelliWeather</a>, intelliweather.js is a flexible JavaScript library
+that provides a strong foundation for building robust satellite radar web pages, 
+by talking to the IntelliWeather Image API.</p>
+
+
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>The plugin needs a container to build it's UI within.</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s1"><span class="pl-pds">"</span>iw<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+
+<p>Then at the bottom in a script element, use jQuery to find your container
+element and then call intelliWeather on it, passing in a descriptor. View
+<a href="https://github.com/intelliweather/IntelliWeather.js/blob/master/test/fixtures/descriptors.js">test/fixtures/descriptors.js</a> for example descriptors.</p>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s1"><span class="pl-pds">'</span>.iw<span class="pl-pds">'</span></span>).intelliWeather({
+  local<span class="pl-k">:</span> {
+    channel<span class="pl-k">:</span> <span class="pl-c1">1</span>
+  }
+});</pre></div>
+
+<p>You can also download a descriptor using an id for the descriptor.</p>
+
+<div class="highlight highlight-javascript"><pre>$(<span class="pl-s1"><span class="pl-pds">'</span>.iw<span class="pl-pds">'</span></span>).intelliWeather({
+  remote<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>https://gfx1.intelliweather.net/api/descriptors/{descriptor-id}<span class="pl-pds">'</span></span>
+});</pre></div>
+
+<h2>
+<a id="versioning" class="anchor" href="#versioning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Versioning</h2>
+
+<p>For transparency and insight into our release cycle, releases will be numbered
+with the following format:</p>
+
+<p><code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code></p>
+
+<p>And constructed with the following guidelines:</p>
+
+<ul>
+<li>Breaking backwards compatibility bumps the major</li>
+<li>New additions without breaking backwards compatibility bumps the minor</li>
+<li>Bug fixes and misc changes bump the patch</li>
+</ul>
+
+<p>For more information on semantic versioning, please visit <a href="http://semver.org/">http://semver.org/</a>.</p>
+
+<h2>
+<a id="developers" class="anchor" href="#developers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Developers</h2>
+
+<p>The dev environment uses the <a href="http://nodejs.org/">node.js</a> platform. In order to build and test
+intelliweather.js, you'll need to install its dev dependencies by running
+(<code>$ npm install</code>). Below is an overview of the available Gulp tasks that'll be
+useful in development.</p>
+
+<ul>
+<li>
+<code>gulp build</code>
+
+<ul>
+<li>Builds <em>intelliweather.js</em> from source.</li>
+</ul>
+</li>
+<li>
+<code>gulp clean</code>
+
+<ul>
+<li>Cleans the build artifacts.</li>
+</ul>
+</li>
+<li>
+<code>gulp lint</code>
+
+<ul>
+<li>Runs source and test files through JSHint.</li>
+</ul>
+</li>
+<li>
+<code>gulp watch</code>
+
+<ul>
+<li>Rebuilds <em>intelliweather.js</em> whenever a source file is modified.</li>
+</ul>
+</li>
+<li>
+<code>gulp server</code>
+
+<ul>
+<li>Serves files from the root of intelliweather.js on localhost:3000. Useful for
+using <em>test/index.html</em> for debugging/testing.</li>
+</ul>
+</li>
+<li>
+<code>gulp dev</code>
+
+<ul>
+<li>Runs <code>gulp watch</code> and <code>gulp server</code> in parallel.</li>
+</ul>
+</li>
+</ul>
+
+
+
+<h2>
+<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing</h2>
+
+<p>The only tests available is an integration testing page, run (<code>$ gulp dev</code>) and 
+a browser window will launch. After, it launches, navigate to the 
+<a href="https://localhost:3000/test/index.html">integration test page</a>.</p>
+
+
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Copyright 2014 IntelliWeather, Inc.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">IntelliWeather.js maintained by <a href="https://github.com/intelliweather">intelliweather</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

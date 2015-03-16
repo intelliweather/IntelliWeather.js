@@ -20,23 +20,24 @@ The plugin needs a container to build it's UI within.
 ```
 
 Then at the bottom in a script element, use jQuery to find your container
-element and then call intelliWeather on it, passing in a descriptor.
+element and then call intelliWeather on it, passing in a descriptor. View
+[test/fixtures/descriptors.js][descriptor-examples] for example descriptors.
 
 ```javascript
 $('.iw').intelliWeather({
-  descriptor: {
+  local: {
     channel: 1
   }
 });
 ```
 
-You can also download a descriptor with your API key and an id for the
-descriptor.
+[descriptor-examples]: https://github.com/intelliweather/IntelliWeather.js/blob/master/test/fixtures/descriptors.js
+
+You can also download a descriptor using an id for the descriptor.
 
 ```javascript
 $('.iw').intelliWeather({
-  apiKey: 'your-api-key',
-  descriptor: 'descriptor-id'
+  remote: 'https://gfx1.intelliweather.net/api/descriptors/{descriptor-id}'
 });
 ```
 

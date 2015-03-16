@@ -143,7 +143,7 @@ var IntelliWeather = (function() {
     },
 
     _defaults: {
-      imageHost: 'https://172.16.125.131:44305',
+      imageHost: 'https://gfx1.intelliweather.net',
       imagePath: '{imageHost}/c/{channel}/{id}.{format}',
       // If a channel doesn't have a standard sequence length, use this value
       defaultSequenceLength: 12,

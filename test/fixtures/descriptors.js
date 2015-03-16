@@ -56,5 +56,33 @@ fixtures.descriptors = {
     series: true,
     seriesLength: 12,
     timeZone: 'utc'
+  },
+  customBrandingPopupSeries: {
+    channel: 5,
+    commands: {
+      watermarks: [
+        '1_Acme'
+      ],
+      mode: "max",
+      quality: 85
+    },
+    displayWidth: 320,
+    displayHeight: 240,
+    series: false,
+    expand: {
+      channel: 5,
+      displayWidth: 640,
+      displayHeight: 480,
+      series: true,
+      seriesLength: 12,
+      timeZone: 'utc',
+      commands: {
+        watermarks: [
+          '1_Acme'
+        ],
+        mode: 'max',
+        quality: 85
+      }
+    }
   }
 };

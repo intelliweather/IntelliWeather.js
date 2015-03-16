@@ -22,6 +22,8 @@ var _ = (function() {
 
     isFunction: $.isFunction,
 
+    isObject: $.isPlainObject,
+
     isBool: function(obj) { return typeof obj === 'boolean'; },
 
     isNumber: function(obj) { return typeof obj === 'number'; },

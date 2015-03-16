@@ -6,19 +6,59 @@
 (function() {
   'use strict';
 
-  var dataKey = 'iw';
+  var dataKey = 'iw', methods;
 
-  $.fn.intelliWeather = function(o) {
-    return this.each(function() {
+  methods = {
+    initialize: function initialize(o) {
       var $container = $(this);
 
-      var intelliWeather = new IntelliWeather({
-        container: $container,
-        descriptor: o
-      });
+      return this.each(attach);
 
-      $container.data(dataKey, intelliWeather);
-    });
+      function fail() {
+        console.log('failed retrieving the remote descriptor');
+      }
+
+      function success() {
+        var remote = _.isObject(o.remote) ? o.remote : {};
+        var descriptor = _.extend({}, o.local, remote);
+        var intelliWeather = new IntelliWeather({
+          container: $container,
+          descriptor: descriptor
+        });
+
+        $container.data(dataKey, intelliWeather);
+      }
+
+      function getRemoteDescriptor(o) {
+        var deferred;
+
+        if (o.remote) {
+          deferred = $.ajax(o.remote, {
+            type: 'GET',
+            dataType: 'json',
+            cache: false,
+            context: this
+          }).done(handleRemoteResponse);
+        }
+        else {
+          deferred = $.Deferred().resolve();
+        }
+
+        return deferred;
+
+        function handleRemoteResponse(resp) {
+          o.remote = resp;
+        }
+      }
+
+      function attach() {
+        getRemoteDescriptor(o).done(success).fail(fail);
+      }
+    }
+  };
+
+  $.fn.intelliWeather = function(o) {
+    return methods.initialize.apply(this, arguments);
   };
 
 })();

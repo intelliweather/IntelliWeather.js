@@ -28,7 +28,7 @@ var IntelliWeather = (function() {
   _.extend(IntelliWeather.prototype, {
     _modalCompleted: function modalCompleted(modal) {
       var descriptor = _.extend({}, this.descriptor.expand);
-      modal.intelliWeather(descriptor);
+      modal.intelliWeather({ local: descriptor });
     },
 
     _formatTimestamp: function formatTimestamp(timeStamp) {

@@ -16,10 +16,13 @@
     </div>
     <div>
       <h4>Still Image with Popup Series</h4>
-      <div class="iw popupSeries">
+      <div class="iw popupSeries local">
       </div>
       <h4>Inline Series</h4>
-      <div class="iw series">
+      <div class="iw series local">
+      </div>
+      <h4>Still Image with Popup Series via Remote Descriptor</h4>
+      <div class="iw popupSeries remote">
       </div>
     </div>
 
@@ -31,8 +34,9 @@
     <script type="text/javascript">
     //<!--
       $(function(){
-        $('.iw.popupSeries').intelliWeather(fixtures.descriptors.popupSeries);
-        $('.iw.series').intelliWeather(fixtures.descriptors.series);
+        $('.iw.popupSeries.local').intelliWeather({ local: fixtures.descriptors.popupSeries });
+        $('.iw.series.local').intelliWeather({ local: fixtures.descriptors.series });
+        $('.iw.popupSeries.remote').intelliWeather({ remote: 'https://172.16.125.131:44305/api/descriptors/5_nat_expand' });
       });
     //-->
     </script>

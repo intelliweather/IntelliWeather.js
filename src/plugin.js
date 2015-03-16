@@ -36,7 +36,6 @@
           deferred = $.ajax(o.remote, {
             type: 'GET',
             dataType: 'json',
-            cache: false,
             context: this
           }).done(handleRemoteResponse);
         }

@@ -12,7 +12,7 @@ var css = (function() {
       fontSize: '12px',
       fontWeight: 'bold',
       width: '100%',
-      zIndex: '500',
+      zIndex: '100',
       position: 'absolute',
       top: '0px',
       padding: '8px',
@@ -51,7 +51,7 @@ var css = (function() {
     },
     overlay: {
       position: 'fixed',
-      zIndex: '100',
+      zIndex: '500',
       top: '0px',
       left: '0px',
       height: '100%',

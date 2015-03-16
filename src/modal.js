@@ -49,7 +49,6 @@ var Modal = (function() {
 
     _anchorClicked: function anchorClicked(anchor, e) {
       var modalId = $(anchor).attr('href'), that = this;
-      console.log(modalId);
 
       this.$overlay.click(function() {
         that._close(modalId);

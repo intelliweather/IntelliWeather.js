@@ -61,7 +61,7 @@ fixtures.descriptors = {
     channel: 5,
     commands: {
       watermarks: [
-        '1_Acme'
+        '1_KPAY'
       ],
       mode: "max",
       quality: 85
@@ -78,7 +78,7 @@ fixtures.descriptors = {
       timeZone: 'utc',
       commands: {
         watermarks: [
-          '1_Acme'
+          '1_KPAY'
         ],
         mode: 'max',
         quality: 85

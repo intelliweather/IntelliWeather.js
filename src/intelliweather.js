@@ -12,7 +12,7 @@ var IntelliWeather = (function() {
     this.$container = o.container;
     this.descriptor = _.extend({}, this._defaults, o.descriptor);
     this.$images = [];
-    this.slider = null;
+    this.carousel = null;
 
     // TODO: Take into account current width and height
     this.$container.css({
@@ -133,12 +133,12 @@ var IntelliWeather = (function() {
       this._preloadImages(imagePath, dataset).done(function() {
         this._renderTopBar();
         this._renderImages(dataset);
-        this.slider = new Slider({
+        this.carousel = new Carousel({
           container: this.$container,
           controlArea: '.iw-topbar'
         });
-        this.slider.addListener('slideChanged', this, this._updateTopBar);
-        this.slider.play();
+        this.carousel.addListener('slideChanged', this, this._updateTopBar);
+        this.carousel.play();
       });
     },
 
@@ -160,9 +160,9 @@ var IntelliWeather = (function() {
       this.dataset = null;
       this.$images = [];
 
-      if (this.slider) {
-        this.slider.destroy();
-        this.slider = null;
+      if (this.carousel) {
+        this.carousel.destroy();
+        this.carousel = null;
       }
     }
 

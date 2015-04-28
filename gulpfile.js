@@ -27,7 +27,7 @@ var bundle = [
   'src/css.js',
   'src/html.js',
   'src/modal.js',
-  'src/slider.js',
+  'src/carousel.js',
   'src/query_string.js',
   'src/poller.js',
   'src/intelliweather.js',

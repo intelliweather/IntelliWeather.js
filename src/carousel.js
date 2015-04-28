@@ -3,10 +3,10 @@
  * Copyright 2014 IntelliWeather, Inc.
  */
 
-var Slider = (function() {
+var Carousel = (function() {
   'use strict';
 
-  function Slider(o) {
+  function Carousel(o) {
     this.settings = _.extend({}, this._defaults, o);
     this.$container = this.settings.container;
     this.slides = this.$container.find('img');
@@ -24,7 +24,7 @@ var Slider = (function() {
     $(this.slides[this.currentSlide]).css({ display: 'block' });
   }
 
-  _.extend(Slider.prototype, {
+  _.extend(Carousel.prototype, {
     _setupControls: function setupControls() {
       if (this.slides.length > 1 && this.settings.controlArea && this.$container.find(this.settings.controlArea).length) {
         this.$controls = $(html.controls).css(css.iwControls);
@@ -156,6 +156,6 @@ var Slider = (function() {
     }
   });
 
-  return Slider;
+  return Carousel;
 
 })();

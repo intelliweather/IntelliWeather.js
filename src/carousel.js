@@ -90,7 +90,6 @@ var Carousel = (function() {
 
     _defaults: {
       pauseTime: 700,
-      pauseOnHover: true,
       startSlide: 0
     },
 

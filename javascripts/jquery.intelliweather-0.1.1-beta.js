@@ -1,5 +1,5 @@
 /*!
- * IntelliWeather.js 0.1.0-beta
+ * IntelliWeather.js 0.1.1-beta
  * http://www.intelliweather.com
  * Copyright 2014 IntelliWeather, Inc.
  */
@@ -116,6 +116,21 @@
                 opacity: "0",
                 zIndex: "11000",
                 left: "50%"
+            },
+            modalHeader: {
+                display: "block",
+                height: "20px",
+                padding: "0 5px 0 0",
+                color: "white",
+                backgroundColor: "#000000",
+                textAlign: "right"
+            },
+            modalClose: {
+                cursor: "pointer"
+            },
+            modalContent: {
+                display: "block",
+                position: "absolute"
             }
         };
     }();
@@ -131,7 +146,10 @@
             previousControl: '<i class="iw-prev fa fa-backward fa-2x"></i>',
             pausePlayControl: '<i class="iw-pauseplay fa fa-pause fa-2x"></i>',
             nextControl: '<i class="iw-next fa fa-forward fa-2x"></i>',
-            overlay: '<div id="overlay"></div>'
+            overlay: '<div id="overlay"></div>',
+            modalHeader: '<div class="header"></div>',
+            modalClose: '<i class="fa fa-close fa-2"></i>',
+            modalContent: '<div class="content"></div>'
         };
     }();
     var Modal = function() {
@@ -139,12 +157,20 @@
         function Modal(o) {
             var that = this;
             this.settings = _.extend({}, this._defaults, o);
-            this.$overlay = $(html.overlay).css(css.overlay);
-            $("body").append(this.$overlay);
+            if ($("#overlay").length) {
+                this.$overlay = $("#overlay");
+            } else {
+                this.$overlay = $(html.overlay).css(css.overlay);
+                $("body").append(this.$overlay);
+            }
             this.$anchor = this.settings.anchor;
             this.$anchor.click(function(e) {
                 that._anchorClicked(this, e);
                 e.preventDefault();
+            });
+            $(this.settings.closeButton).click(function() {
+                var modalId = that.$anchor.attr("href");
+                that._close(modalId);
             });
             this.listeners = {};
         }
@@ -198,7 +224,8 @@
             },
             _defaults: {
                 top: 100,
-                overlay: .5
+                overlay: .5,
+                closeButton: null
             },
             addListener: function addListener(type, context, listener) {
                 if (typeof this.listeners[type] == "undefined") {
@@ -212,9 +239,9 @@
         });
         return Modal;
     }();
-    var Slider = function() {
+    var Carousel = function() {
         "use strict";
-        function Slider(o) {
+        function Carousel(o) {
             this.settings = _.extend({}, this._defaults, o);
             this.$container = this.settings.container;
             this.slides = this.$container.find("img");
@@ -231,7 +258,7 @@
                 display: "block"
             });
         }
-        _.extend(Slider.prototype, {
+        _.extend(Carousel.prototype, {
             _setupControls: function setupControls() {
                 if (this.slides.length > 1 && this.settings.controlArea && this.$container.find(this.settings.controlArea).length) {
                     this.$controls = $(html.controls).css(css.iwControls);
@@ -287,8 +314,7 @@
                 }
             },
             _defaults: {
-                pauseTime: 700,
-                pauseOnHover: true,
+                pauseTime: 560,
                 startSlide: 0
             },
             destroy: function destroy() {
@@ -354,7 +380,7 @@
                 });
             }
         });
-        return Slider;
+        return Carousel;
     }();
     var queryString = function() {
         "use strict";
@@ -591,7 +617,7 @@
             this.$container = o.container;
             this.descriptor = _.extend({}, this._defaults, o.descriptor);
             this.$images = [];
-            this.slider = null;
+            this.carousel = null;
             this.$container.css({
                 width: this.descriptor.displayWidth,
                 height: this.descriptor.displayHeight
@@ -603,7 +629,7 @@
         _.extend(IntelliWeather.prototype, {
             _modalCompleted: function modalCompleted(modal) {
                 var descriptor = _.extend({}, this.descriptor.expand);
-                modal.intelliWeather({
+                modal.find(".content").intelliWeather({
                     local: descriptor
                 });
             },
@@ -613,14 +639,22 @@
                 var year = timeStamp.getFullYear();
                 var hours = _.padZeroes(timeStamp.getHours());
                 var minutes = _.padZeroes(timeStamp.getMinutes());
-                return month + "/" + day + "/" + year + " " + hours + ":" + minutes + " " + this.descriptor.timeZone.toUpperCase();
+                return month + "/" + day + "/" + year + " " + hours + ":" + minutes;
             },
             _updateTopBar: function updateTopBar(image) {
-                var dateUtc = image.data("timestamp") || "";
-                this.$seriesTitle.text(this.dataset.description || "");
-                this.$subTitle.text(" - " + _.toAbbRelativeTime(dateUtc - Date.now()));
-                this.$labelFrame.text(" " + _.padZeroes(image.data("index") + 1) + " of " + this.dataset.images.length + "");
-                this.$labelTime.html(this._formatTimestamp(image.data("timestamp")));
+                var timestamp = image.data("timestamp") || "";
+                if (this.$seriesTitle) {
+                    this.$seriesTitle.text(this.dataset.description || "");
+                }
+                if (this.$subTitle) {
+                    this.$subTitle.text(" - " + _.toAbbRelativeTime(timestamp - Date.now()));
+                }
+                if (this.$labelFrame) {
+                    this.$labelFrame.text(" " + _.padZeroes(image.data("index") + 1) + " of " + this.dataset.images.length + "");
+                }
+                if (this.$labelTime) {
+                    this.$labelTime.html(this._formatTimestamp(timestamp));
+                }
             },
             _renderImages: function renderImages(dataset) {
                 var that = this;
@@ -634,29 +668,37 @@
                             height: that.descriptor.expand.displayHeight
                         }));
                         $modal.addClass("iw");
+                        var $modalHeader = $(html.modalHeader).css(css.modalHeader);
+                        var $modalClose = $(html.modalClose).css(css.modalClose);
+                        $modalHeader.append($modalClose);
+                        var $modalContent = $(html.modalContent).css(css.modalContent);
+                        $modal.append($modalHeader).append($modalContent);
                         $("body").append($modal);
                         var $anchor = $("<a></a>").attr("href", "#modal-" + image.id);
                         $anchor.append($image);
                         that.$container.append($anchor);
                         var modal = new Modal({
                             anchor: $anchor,
-                            top: 200
+                            top: 200,
+                            closeButton: $modalClose
                         });
                         modal.addListener("onComplete", that, that._modalCompleted);
                     }
                 });
             },
             _renderTopBar: function renderTopBar() {
+                this.$topbar = $(html.topBar).css(css.iwTopBar);
                 if (this.descriptor.series) {
-                    this.$topbar = $(html.topBar).css(css.iwTopBar);
                     this.$seriesTitle = $(html.seriesTitle).appendTo(this.$topbar);
                     this.$subTitle = $(html.subTitle).appendTo(this.$topbar);
                     this.$labelFrame = $(html.labelFrame).appendTo(this.$topbar);
                     this.$labelTime = $(html.labelTime).appendTo(this.$topbar).css(css.iwTime);
-                    this.$container.append(this.$topbar);
-                    var $firstImage = this.$images[this.dataset.images[0].id];
-                    this._updateTopBar($firstImage);
+                } else {
+                    this.$labelTime = $(html.labelTime).appendTo(this.$topbar).css(css.iwTime);
                 }
+                this.$container.append(this.$topbar);
+                var $firstImage = this.$images[this.dataset.images[0].id];
+                this._updateTopBar($firstImage);
             },
             _preloadImages: function preloadImages(imagePath, dataset) {
                 var d = $.Deferred(), loaders = [], that = this;
@@ -692,12 +734,12 @@
                 this._preloadImages(imagePath, dataset).done(function() {
                     this._renderTopBar();
                     this._renderImages(dataset);
-                    this.slider = new Slider({
+                    this.carousel = new Carousel({
                         container: this.$container,
                         controlArea: ".iw-topbar"
                     });
-                    this.slider.addListener("slideChanged", this, this._updateTopBar);
-                    this.slider.play();
+                    this.carousel.addListener("slideChanged", this, this._updateTopBar);
+                    this.carousel.play();
                 });
             },
             _defaults: {
@@ -712,9 +754,9 @@
                 this.$container.empty();
                 this.dataset = null;
                 this.$images = [];
-                if (this.slider) {
-                    this.slider.destroy();
-                    this.slider = null;
+                if (this.carousel) {
+                    this.carousel.destroy();
+                    this.carousel = null;
                 }
             }
         });

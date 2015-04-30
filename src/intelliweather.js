@@ -46,10 +46,22 @@ var IntelliWeather = (function() {
 
     _updateTopBar: function updateTopBar(image) {
       var timestamp = image.data('timestamp') || '';
-      this.$seriesTitle.text(this.dataset.description || '');
-      this.$subTitle.text(' - ' + _.toAbbRelativeTime(timestamp - Date.now()));
-      this.$labelFrame.text(' ' + _.padZeroes(image.data('index') + 1) + ' of ' + this.dataset.images.length + '');
-      this.$labelTime.html(this._formatTimestamp(timestamp));
+
+      if (this.$seriesTitle) {
+        this.$seriesTitle.text(this.dataset.description || '');
+      }
+
+      if (this.$subTitle) {
+        this.$subTitle.text(' - ' + _.toAbbRelativeTime(timestamp - Date.now()));
+      }
+
+      if (this.$labelFrame) {
+        this.$labelFrame.text(' ' + _.padZeroes(image.data('index') + 1) + ' of ' + this.dataset.images.length + '');
+      }
+
+      if (this.$labelTime) {
+        this.$labelTime.html(this._formatTimestamp(timestamp));
+      }
     },
 
     _renderImages: function renderImages(dataset) {
@@ -82,17 +94,20 @@ var IntelliWeather = (function() {
     },
 
     _renderTopBar: function renderTopBar() {
+      this.$topbar = $(html.topBar).css(css.iwTopBar);
+
       if (this.descriptor.series) {
-        this.$topbar = $(html.topBar).css(css.iwTopBar);
         this.$seriesTitle = $(html.seriesTitle).appendTo(this.$topbar);
         this.$subTitle = $(html.subTitle).appendTo(this.$topbar);
         this.$labelFrame = $(html.labelFrame).appendTo(this.$topbar);
         this.$labelTime = $(html.labelTime).appendTo(this.$topbar).css(css.iwTime);
-        this.$container.append(this.$topbar);
-
-        var $firstImage = this.$images[this.dataset.images[0].id];
-        this._updateTopBar($firstImage);
+      } else {
+        this.$labelTime = $(html.labelTime).appendTo(this.$topbar).css(css.iwTime);
       }
+
+      this.$container.append(this.$topbar);
+      var $firstImage = this.$images[this.dataset.images[0].id];
+      this._updateTopBar($firstImage);
     },
 
     _preloadImages: function preloadImages(imagePath, dataset) {

@@ -41,16 +41,15 @@ var IntelliWeather = (function() {
              day + '/' +
              year + ' ' +
              hours + ':' +
-             minutes + ' ' +
-             this.descriptor.timeZone.toUpperCase();
+             minutes;
     },
 
     _updateTopBar: function updateTopBar(image) {
-      var dateUtc = image.data('timestamp') || '';
+      var timestamp = image.data('timestamp') || '';
       this.$seriesTitle.text(this.dataset.description || '');
-      this.$subTitle.text(' - ' + _.toAbbRelativeTime(dateUtc - Date.now()));
+      this.$subTitle.text(' - ' + _.toAbbRelativeTime(timestamp - Date.now()));
       this.$labelFrame.text(' ' + _.padZeroes(image.data('index') + 1) + ' of ' + this.dataset.images.length + '');
-      this.$labelTime.html(this._formatTimestamp(image.data('timestamp')));
+      this.$labelTime.html(this._formatTimestamp(timestamp));
     },
 
     _renderImages: function renderImages(dataset) {
@@ -102,7 +101,6 @@ var IntelliWeather = (function() {
       $.each(dataset.images, function(index, image) {
         var src = _.expandUrl(imagePath, _.extend(that.descriptor, dataset, image));
         var d = $.Deferred();
-
         var $img = $('<img />').attr('id', image.id).attr('src', src);
         $img.data('index', index);
         $img.data('timestamp', new Date(image.time));

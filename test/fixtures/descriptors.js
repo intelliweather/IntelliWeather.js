@@ -25,7 +25,6 @@ fixtures.descriptors = {
       displayHeight: 480,
       series: true,
       seriesLength: 12,
-      timeZone: 'utc',
       commands: {
         crop: [
           129,
@@ -55,7 +54,6 @@ fixtures.descriptors = {
     displayHeight: 480,
     series: true,
     seriesLength: 12,
-    timeZone: 'utc'
   },
   customBrandingPopupSeries: {
     channel: 5,
@@ -75,7 +73,6 @@ fixtures.descriptors = {
       displayHeight: 480,
       series: true,
       seriesLength: 12,
-      timeZone: 'utc',
       commands: {
         watermarks: [
           '1_Acme'

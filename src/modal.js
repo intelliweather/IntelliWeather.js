@@ -9,12 +9,24 @@ var Modal = (function() {
   function Modal(o) {
     var that = this;
     this.settings = _.extend({}, this._defaults, o);
-    this.$overlay = $(html.overlay).css(css.overlay);
-    $('body').append(this.$overlay);
+
+    // Only add the overlay if it doesn't already exist in the DOM
+    if ($('#overlay').length) {
+      this.$overlay = $('#overlay');
+    } else {
+      this.$overlay = $(html.overlay).css(css.overlay);
+      $('body').append(this.$overlay);
+    }
+
     this.$anchor = this.settings.anchor;
     this.$anchor.click(function(e) {
       that._anchorClicked(this, e);
       e.preventDefault();
+    });
+
+    $(this.settings.closeButton).click(function() {
+      var modalId = that.$anchor.attr('href');
+      that._close(modalId);
     });
     this.listeners = {};
   }
@@ -72,7 +84,8 @@ var Modal = (function() {
 
     _defaults: {
       top: 100,
-      overlay: 0.5
+      overlay: 0.5,
+      closeButton: null
     },
 
     addListener: function addListener(type, context, listener) {

@@ -28,7 +28,7 @@ var IntelliWeather = (function() {
   _.extend(IntelliWeather.prototype, {
     _modalCompleted: function modalCompleted(modal) {
       var descriptor = _.extend({}, this.descriptor.expand);
-      modal.intelliWeather({ local: descriptor });
+      modal.find('.content').intelliWeather({ local: descriptor });
     },
 
     _formatTimestamp: function formatTimestamp(timeStamp) {
@@ -78,6 +78,11 @@ var IntelliWeather = (function() {
             height: that.descriptor.expand.displayHeight
           }));
           $modal.addClass('iw');
+          var $modalHeader = $(html.modalHeader).css(css.modalHeader);
+          var $modalClose = $(html.modalClose).css(css.modalClose);
+          $modalHeader.append($modalClose);
+          var $modalContent = $(html.modalContent).css(css.modalContent);
+          $modal.append($modalHeader).append($modalContent);
           $('body').append($modal);
 
           var $anchor = $('<a></a>').attr('href', '#modal-' + image.id);
@@ -86,7 +91,8 @@ var IntelliWeather = (function() {
 
           var modal = new Modal({
             anchor: $anchor,
-            top: 200
+            top: 200,
+            closeButton: $modalClose
           });
           modal.addListener('onComplete', that, that._modalCompleted);
         }

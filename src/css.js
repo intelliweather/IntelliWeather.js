@@ -60,11 +60,26 @@ var css = (function() {
       display: 'none'
     },
     modal: {
-      display : 'none',
-      position : 'fixed',
-      opacity : '0',
+      display: 'none',
+      position: 'fixed',
+      opacity: '0',
       zIndex: '11000',
-      left : '50%'
+      left: '50%'
+    },
+    modalHeader: {
+      display: 'block',
+      height: '20px',
+      padding: '0 5px 0 0',
+      color: 'white',
+      backgroundColor: '#000000',
+      textAlign: 'right'
+    },
+    modalClose: {
+      cursor: 'pointer'
+    },
+    modalContent: {
+      display: 'block',
+      position: 'absolute'
     }
   };
 })();

@@ -89,7 +89,7 @@ var Carousel = (function() {
     },
 
     _defaults: {
-      pauseTime: 700,
+      pauseTime: 560,
       startSlide: 0
     },
 

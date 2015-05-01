@@ -1,5 +1,5 @@
 /*!
- * IntelliWeather.js 0.1.2-beta
+ * IntelliWeather.js 0.1.3-beta
  * http://www.intelliweather.com
  * Copyright 2014 IntelliWeather, Inc.
  */
@@ -154,11 +154,13 @@
             labelFrame: '<span class="iw-frame-index"></span>',
             labelTime: '<span class="iw-time"></span>',
             controls: '<div class="iw-controls"></div>',
+            playbackControls: '<div class="iw-playbackControls"></div>',
             previousControl: '<i class="iw-prev fa fa-backward fa-2x"></i>',
             pausePlayControl: '<i class="iw-pauseplay fa fa-pause fa-2x"></i>',
             nextControl: '<i class="iw-next fa fa-forward fa-2x"></i>',
+            speedControl: '<div class="iw-speedControl"></div>',
             minusControl: '<i class="iw-minus fa fa-minus"></i>',
-            speedIndicator: '<i class="fa fa-circle-o"></i>',
+            speedIndicator: '<i class="iw-indicator fa fa-circle-o"></i>',
             plusControl: '<i class="iw-plus fa fa-plus"></i>',
             overlay: '<div id="overlay"></div>',
             modalHeader: '<div class="header"></div>',
@@ -273,46 +275,52 @@
             });
         }
         _.extend(Carousel.prototype, {
-            _setupSpeedControl: function setupSpeedControl() {
-                var $speedControl = $('<div id="speedControl"></div>');
-                var pauseTime = this.settings.pauseTime;
-                var percentage = pauseTime * .2;
-                var pauseTimes = [];
-                pauseTimes[0] = pauseTime + percentage * 2;
-                pauseTimes[1] = pauseTime + percentage;
-                pauseTimes[2] = pauseTime;
-                pauseTimes[3] = pauseTime - percentage;
-                pauseTimes[4] = pauseTime - percentage * 2;
-                this.currentPauseTimeIndex = 2;
-                this.$minusControl = $(html.minusControl).css(css.iwMinus).appendTo($speedControl);
-                for (var i = 0; i < pauseTimes.length; i++) {
-                    var $indicator = $(html.speedIndicator).attr("id", "ind-" + i).css(css.iwSpeedIndicator).appendTo($speedControl);
-                    if (pauseTime <= pauseTimes[i]) {
-                        $indicator.removeClass("fa-circle-o").addClass("fa-dot-circle-o");
+            _createSpeedIndicators: function createSpeedIndicators($speedControl) {
+                var defaultPauseTime = this.settings.pauseTime;
+                var percentage = defaultPauseTime * .2;
+                var speedIndicatorCount = this.settings.speedIndicatorCount;
+                var middle = Math.floor(speedIndicatorCount / 2);
+                var indicators = [];
+                for (var i = 0; i < speedIndicatorCount; i++) {
+                    var $element = $(html.speedIndicator).css(css.iwSpeedIndicator).appendTo($speedControl);
+                    var pauseTime = defaultPauseTime + percentage * (middle - i);
+                    if (defaultPauseTime <= pauseTime) {
+                        $element.removeClass("fa-circle-o").addClass("fa-dot-circle-o");
                     }
+                    indicators[i] = {
+                        element: $element,
+                        pauseTime: pauseTime
+                    };
                 }
+                return indicators;
+            },
+            _setupSpeedControl: function setupSpeedControl() {
+                var $speedControl = $(html.speedControl);
+                this.$minusControl = $(html.minusControl).css(css.iwMinus).appendTo($speedControl);
+                var indicators = this._createSpeedIndicators($speedControl);
+                this.currentSpeedIndex = Math.floor(indicators.length / 2);
                 this.$plusControl = $(html.plusControl).css(css.iwPlus).appendTo($speedControl);
                 var that = this;
                 this.$minusControl.click(function() {
-                    if (that.currentPauseTimeIndex - 1 >= 0) {
-                        var selector = "#ind-" + that.currentPauseTimeIndex;
-                        $(selector).removeClass("fa-dot-circle-o").addClass("fa-circle-o");
-                        that.currentPauseTimeIndex = that.currentPauseTimeIndex - 1;
-                        that.settings.pauseTime = pauseTimes[that.currentPauseTimeIndex];
+                    if (that.currentSpeedIndex - 1 >= 0) {
+                        var $element = indicators[that.currentSpeedIndex].element;
+                        $element.removeClass("fa-dot-circle-o").addClass("fa-circle-o");
+                        that.currentSpeedIndex = that.currentSpeedIndex - 1;
+                        that.settings.pauseTime = indicators[that.currentSpeedIndex].pauseTime;
                     }
                 });
                 this.$plusControl.click(function() {
-                    if (that.currentPauseTimeIndex + 1 < pauseTimes.length) {
-                        that.currentPauseTimeIndex = that.currentPauseTimeIndex + 1;
-                        var selector = "#ind-" + that.currentPauseTimeIndex;
-                        $(selector).removeClass("fa-circle-o").addClass("fa-dot-circle-o");
-                        that.settings.pauseTime = pauseTimes[that.currentPauseTimeIndex];
+                    if (that.currentSpeedIndex + 1 < indicators.length) {
+                        that.currentSpeedIndex = that.currentSpeedIndex + 1;
+                        var $element = indicators[that.currentSpeedIndex].element;
+                        $element.removeClass("fa-circle-o").addClass("fa-dot-circle-o");
+                        that.settings.pauseTime = indicators[that.currentSpeedIndex].pauseTime;
                     }
                 });
                 return $speedControl;
             },
             _setupPlaybackControls: function setupPlaybackControls() {
-                var $playbackControls = $('<div id="playbackControls"></div>');
+                var $playbackControls = $(html.playbackControls);
                 this.$previousControl = $(html.previousControl).css(css.iwPrevious).appendTo($playbackControls);
                 this.$pausePlayControl = $(html.pausePlayControl).css(css.iwPausePlay).appendTo($playbackControls);
                 this.$nextControl = $(html.nextControl).css(css.iwNext).appendTo($playbackControls);
@@ -373,7 +381,8 @@
             },
             _defaults: {
                 pauseTime: 560,
-                startSlide: 0
+                startSlide: 0,
+                speedIndicatorCount: 5
             },
             destroy: function destroy() {
                 clearTimeout(this.timer);

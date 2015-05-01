@@ -49,6 +49,17 @@ var css = (function() {
       paddingLeft: '50px',
       paddingRight: '50px'
     },
+    iwMinus: {
+      cursor: 'pointer',
+      padding: '8px'
+    },
+    iwSpeedIndicator: {
+      padding: '5px'
+    },
+    iwPlus: {
+      cursor: 'pointer',
+      padding: '8px'
+    },
     overlay: {
       position: 'fixed',
       zIndex: '500',

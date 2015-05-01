@@ -64,7 +64,7 @@ var Carousel = (function() {
       return indicators;
     },
     _setupSpeedControl: function setupSpeedControl() {
-      var $speedControl = $('<div class="iw-speedControl"></div>');
+      var $speedControl = $(html.speedControl);
 
       this.$minusControl = $(html.minusControl).css(css.iwMinus).appendTo($speedControl);
 
@@ -97,7 +97,7 @@ var Carousel = (function() {
       return $speedControl;
     },
     _setupPlaybackControls: function setupPlaybackControls() {
-      var $playbackControls = $('<div class="iw-playbackControls"></div>');
+      var $playbackControls = $(html.playbackControls);
       this.$previousControl = $(html.previousControl).css(css.iwPrevious).appendTo($playbackControls);
       this.$pausePlayControl = $(html.pausePlayControl).css(css.iwPausePlay).appendTo($playbackControls);
       this.$nextControl = $(html.nextControl).css(css.iwNext).appendTo($playbackControls);

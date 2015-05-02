@@ -73,10 +73,12 @@ var Modal = (function() {
       this.$overlay.css({ display: 'block', opacity: 0 });
       this.$overlay.fadeTo(200, this.settings.overlay);
 
+      var marginLeft = -(width / 2) + 'px';
+      var top = this.settings.top + 'px';
       $modal.css(_.extend({}, css.modal, {
         display: 'block',
-        marginLeft: -(width / 2) + 'px',
-        top: this.settings.top + 'px'
+        marginLeft: marginLeft,
+        top: top
       }));
       $modal.fadeTo(200, 1);
       this._fire('onComplete', $modal);

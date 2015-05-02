@@ -91,7 +91,6 @@ var IntelliWeather = (function() {
 
           var modal = new Modal({
             anchor: $anchor,
-            top: 200,
             closeButton: $modalClose
           });
           modal.addListener('onComplete', that, that._modalCompleted);

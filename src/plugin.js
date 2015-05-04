@@ -20,7 +20,8 @@
 
       function success() {
         var remote = _.isObject(o.remote) ? o.remote : {};
-        var descriptor = _.extend({}, o.local, remote);
+        var local = o.local || {};
+        var descriptor = _.extend(true, {}, remote, local);
         var intelliWeather = new IntelliWeather({
           container: $container,
           descriptor: descriptor

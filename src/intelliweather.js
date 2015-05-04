@@ -151,10 +151,11 @@ var IntelliWeather = (function() {
       this._preloadImages(imagePath, dataset).done(function() {
         this._renderTopBar();
         this._renderImages(dataset);
-        this.carousel = new Carousel({
+        var o = _.extend({
           container: this.$container,
           controlArea: '.iw-topbar'
-        });
+        }, this.descriptor.carouselOptions);
+        this.carousel = new Carousel(o);
         this.carousel.addListener('slideChanged', this, this._updateTopBar);
         this.carousel.play();
       });

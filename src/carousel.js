@@ -166,7 +166,7 @@ var Carousel = (function() {
     },
 
     _defaults: {
-      pauseTime: 560,
+      pauseTime: 280,
       startSlide: 0,
       speedIndicatorCount: 5
     },

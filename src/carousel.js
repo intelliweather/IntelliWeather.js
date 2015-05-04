@@ -127,8 +127,15 @@ var Carousel = (function() {
     _setupControls: function setupControls() {
       if (this.slides.length > 1 && this.settings.controlArea && this.$container.find(this.settings.controlArea).length) {
         this.$controls = $(html.controls).css(css.iwControls);
-        this._setupPlaybackControls().appendTo(this.$controls);
-        this._setupSpeedControl().appendTo(this.$controls);
+
+        if (this.settings.displayPlaybackControls) {
+          this._setupPlaybackControls().appendTo(this.$controls);
+        }
+
+        if (this.settings.displaySpeedControl) {
+          this._setupSpeedControl().appendTo(this.$controls);
+        }
+
         this.$container.find(this.settings.controlArea).append(this.$controls);
       }
     },
@@ -168,6 +175,8 @@ var Carousel = (function() {
     _defaults: {
       pauseTime: 280,
       startSlide: 0,
+      displayPlaybackControls: true,
+      displaySpeedControl: true,
       speedIndicatorCount: 5
     },
 
@@ -207,16 +216,23 @@ var Carousel = (function() {
       if (this.state === 'play' && this.slides.length > 1) {
         clearTimeout(this.timer);
         this.state = 'paused';
-        this.$pausePlayControl.removeClass('fa-pause');
-        this.$pausePlayControl.addClass('fa-play');
+
+        if (this.settings.displayPlaybackControls) {
+          this.$pausePlayControl.removeClass('fa-pause');
+          this.$pausePlayControl.addClass('fa-play');
+        }
       }
     },
 
     play: function play() {
       if (this.state === 'paused' && this.slides.length > 1) {
         this.state = 'play';
-        this.$pausePlayControl.removeClass('fa-play');
-        this.$pausePlayControl.addClass('fa-pause');
+
+        if (this.settings.displayPlaybackControls) {
+          this.$pausePlayControl.removeClass('fa-play');
+          this.$pausePlayControl.addClass('fa-pause');
+        }
+
         this._doTimer();
       }
     },

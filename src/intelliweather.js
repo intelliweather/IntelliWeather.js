@@ -13,6 +13,7 @@ var IntelliWeather = (function() {
     this.descriptor = _.extend({}, this._defaults, o.descriptor);
     this.$images = [];
     this.carousel = null;
+    this.timezone = timezone.determine();
 
     // TODO: Take into account current width and height
     this.$container.css({
@@ -41,7 +42,8 @@ var IntelliWeather = (function() {
              day + '/' +
              year + ' ' +
              hours + ':' +
-             minutes;
+             minutes + ' ' +
+             this.timezone.abbr;
     },
 
     _updateTopBar: function updateTopBar(image) {

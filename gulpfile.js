@@ -28,6 +28,7 @@ var bundle = [
   'src/html.js',
   'src/modal.js',
   'src/carousel.js',
+  'src/timezone.js',
   'src/query_string.js',
   'src/poller.js',
   'src/intelliweather.js',

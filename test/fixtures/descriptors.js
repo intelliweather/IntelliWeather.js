@@ -16,8 +16,8 @@ fixtures.descriptors = {
       mode: 'max',
       quality: 85
     },
-    displayWidth: 160,
-    displayHeight: 120,
+    displayWidth: 180,
+    displayHeight: 140,
     series: false,
     expand: {
       channel: 2,
@@ -53,7 +53,7 @@ fixtures.descriptors = {
     displayWidth: 640,
     displayHeight: 480,
     series: true,
-    seriesLength: 12,
+    seriesLength: 12
   },
   customBrandingPopupSeries: {
     channel: 5,
@@ -66,11 +66,19 @@ fixtures.descriptors = {
     },
     displayWidth: 320,
     displayHeight: 240,
+    timeStampOptions: {
+      timezone: 'utc',
+      timeFormat: 'twenty-four-hour'
+    },
     series: false,
     expand: {
       channel: 5,
       displayWidth: 640,
       displayHeight: 480,
+      timeStampOptions: {
+        timezone: 'utc',
+        timeFormat: 'twenty-four-hour'
+      },
       series: true,
       seriesLength: 12,
       commands: {

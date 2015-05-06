@@ -33,17 +33,38 @@ var IntelliWeather = (function() {
     },
 
     _formatTimestamp: function formatTimestamp(timeStamp) {
-      var month = _.padZeroes(timeStamp.getMonth() + 1);
-      var day = _.padZeroes(timeStamp.getDate());
-      var year = timeStamp.getFullYear();
-      var hours = _.padZeroes(timeStamp.getHours());
-      var minutes = _.padZeroes(timeStamp.getMinutes());
-      return month + '/' +
-             day + '/' +
+      var o = this.descriptor.timeStampOptions;
+      var month, day, year, hours, minutes, a = '', tz;
+
+      if (o.timezone === 'utc') {
+        month = timeStamp.getUTCMonth() + 1;
+        day = timeStamp.getUTCDate();
+        year = timeStamp.getUTCFullYear();
+        hours = timeStamp.getUTCHours();
+        minutes = timeStamp.getUTCMinutes();
+        tz = 'GMT';
+      } else {
+        month = timeStamp.getMonth() + 1;
+        day = timeStamp.getDate();
+        year = timeStamp.getFullYear();
+        hours = timeStamp.getHours();
+        minutes = timeStamp.getMinutes();
+        tz = this.timezone.abbr;
+      }
+
+      if (o.timeFormat !== 'twenty-four-hour') {
+        a = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+      }
+
+      return _.padZeroes(month) + '/' +
+             _.padZeroes(day) + '/' +
              year + ' ' +
-             hours + ':' +
-             minutes + ' ' +
-             this.timezone.abbr;
+             _.padZeroes(hours) + ':' +
+             _.padZeroes(minutes) + ' ' +
+             a + ' ' +
+             tz;
     },
 
     _updateTopBar: function updateTopBar(image) {
@@ -173,7 +194,11 @@ var IntelliWeather = (function() {
       // Stop polling after 10 minutes
       pollDuration: 60 * 10,
       // Disable polling by default
-      poll: true
+      poll: true,
+      timeStampOptions: {
+        timezone: 'local',
+        timeFormat: 'twelve-hour'
+      }
     },
 
     destroy: function destroy() {

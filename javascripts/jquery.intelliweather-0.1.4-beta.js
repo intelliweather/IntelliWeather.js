@@ -1,5 +1,5 @@
 /*!
- * IntelliWeather.js 0.1.3-beta
+ * IntelliWeather.js 0.1.4-beta
  * http://www.intelliweather.com
  * Copyright 2014 IntelliWeather, Inc.
  */
@@ -230,10 +230,12 @@
                     opacity: 0
                 });
                 this.$overlay.fadeTo(200, this.settings.overlay);
+                var marginLeft = -(width / 2) + "px";
+                var top = this.settings.top + "px";
                 $modal.css(_.extend({}, css.modal, {
                     display: "block",
-                    marginLeft: -(width / 2) + "px",
-                    top: this.settings.top + "px"
+                    marginLeft: marginLeft,
+                    top: top
                 }));
                 $modal.fadeTo(200, 1);
                 this._fire("onComplete", $modal);
@@ -345,8 +347,12 @@
             _setupControls: function setupControls() {
                 if (this.slides.length > 1 && this.settings.controlArea && this.$container.find(this.settings.controlArea).length) {
                     this.$controls = $(html.controls).css(css.iwControls);
-                    this._setupPlaybackControls().appendTo(this.$controls);
-                    this._setupSpeedControl().appendTo(this.$controls);
+                    if (this.settings.displayPlaybackControls) {
+                        this._setupPlaybackControls().appendTo(this.$controls);
+                    }
+                    if (this.settings.displaySpeedControl) {
+                        this._setupSpeedControl().appendTo(this.$controls);
+                    }
                     this.$container.find(this.settings.controlArea).append(this.$controls);
                 }
             },
@@ -380,8 +386,10 @@
                 }
             },
             _defaults: {
-                pauseTime: 560,
+                pauseTime: 280,
                 startSlide: 0,
+                displayPlaybackControls: true,
+                displaySpeedControl: true,
                 speedIndicatorCount: 5
             },
             destroy: function destroy() {
@@ -425,15 +433,19 @@
                 if (this.state === "play" && this.slides.length > 1) {
                     clearTimeout(this.timer);
                     this.state = "paused";
-                    this.$pausePlayControl.removeClass("fa-pause");
-                    this.$pausePlayControl.addClass("fa-play");
+                    if (this.settings.displayPlaybackControls) {
+                        this.$pausePlayControl.removeClass("fa-pause");
+                        this.$pausePlayControl.addClass("fa-play");
+                    }
                 }
             },
             play: function play() {
                 if (this.state === "paused" && this.slides.length > 1) {
                     this.state = "play";
-                    this.$pausePlayControl.removeClass("fa-play");
-                    this.$pausePlayControl.addClass("fa-pause");
+                    if (this.settings.displayPlaybackControls) {
+                        this.$pausePlayControl.removeClass("fa-play");
+                        this.$pausePlayControl.addClass("fa-pause");
+                    }
                     this._doTimer();
                 }
             },
@@ -448,6 +460,82 @@
             }
         });
         return Carousel;
+    }();
+    var timezone = function() {
+        "use strict";
+        var constants = {
+            HEMISPHERE_SOUTH: "s",
+            BASELINE_YEAR: 2015
+        };
+        var timezones = {
+            "0,0": {
+                name: "Coordinated Universal Time",
+                abbr: "UTC"
+            },
+            "-240,1": {
+                name: "Atlantic Time",
+                abbr: "AT"
+            },
+            "-300,1": {
+                name: "Eastern Time",
+                abbr: "ET"
+            },
+            "-360,1": {
+                name: "Central Time",
+                abbr: "CT"
+            },
+            "-420,1": {
+                name: "Mountain Time",
+                abbr: "MT"
+            },
+            "-420,0": {
+                name: "Mountain Time",
+                abbr: "MT"
+            },
+            "-480,1": {
+                name: "Pacific Time",
+                abbr: "PT"
+            },
+            "-540,1": {
+                name: "Alaska Time",
+                abbr: "AKT"
+            },
+            "-600,1": {
+                name: "Hawaii-Aleutian Time",
+                abbr: "HAT"
+            },
+            "-600,0": {
+                name: "Hawaii-Aleutian Time",
+                abbr: "HAT"
+            },
+            "-660,0": {
+                name: "Samoa Time",
+                abbr: "SST"
+            },
+            "600,0": {
+                name: "Chamorro Standard Time",
+                abbr: "ChST"
+            }
+        };
+        return {
+            determine: determine
+        };
+        function determine() {
+            return timezones[_lookupKey()] || timezones["0,0"];
+        }
+        function _getDateOffset(date) {
+            var offset = -date.getTimezoneOffset();
+            return offset !== null ? offset : 0;
+        }
+        function _lookupKey() {
+            var standard = _getDateOffset(new Date(constants.BASELINE_YEAR, 0, 2)), daylight = _getDateOffset(new Date(constants.BASELINE_YEAR, 5, 2)), diff = standard - daylight;
+            if (diff < 0) {
+                return standard + ",1";
+            } else if (diff > 0) {
+                return daylight + ",1," + constants.HEMISPHERE_SOUTH;
+            }
+            return standard + ",0";
+        }
     }();
     var queryString = function() {
         "use strict";
@@ -685,6 +773,7 @@
             this.descriptor = _.extend({}, this._defaults, o.descriptor);
             this.$images = [];
             this.carousel = null;
+            this.timezone = timezone.determine();
             this.$container.css({
                 width: this.descriptor.displayWidth,
                 height: this.descriptor.displayHeight
@@ -701,12 +790,29 @@
                 });
             },
             _formatTimestamp: function formatTimestamp(timeStamp) {
-                var month = _.padZeroes(timeStamp.getMonth() + 1);
-                var day = _.padZeroes(timeStamp.getDate());
-                var year = timeStamp.getFullYear();
-                var hours = _.padZeroes(timeStamp.getHours());
-                var minutes = _.padZeroes(timeStamp.getMinutes());
-                return month + "/" + day + "/" + year + " " + hours + ":" + minutes;
+                var o = this.descriptor.timeStampOptions;
+                var month, day, year, hours, minutes, a = "", tz;
+                if (o.timezone === "utc") {
+                    month = timeStamp.getUTCMonth() + 1;
+                    day = timeStamp.getUTCDate();
+                    year = timeStamp.getUTCFullYear();
+                    hours = timeStamp.getUTCHours();
+                    minutes = timeStamp.getUTCMinutes();
+                    tz = "GMT";
+                } else {
+                    month = timeStamp.getMonth() + 1;
+                    day = timeStamp.getDate();
+                    year = timeStamp.getFullYear();
+                    hours = timeStamp.getHours();
+                    minutes = timeStamp.getMinutes();
+                    tz = this.timezone.abbr;
+                }
+                if (o.timeFormat !== "twenty-four-hour") {
+                    a = hours >= 12 ? "PM" : "AM";
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                }
+                return _.padZeroes(month) + "/" + _.padZeroes(day) + "/" + year + " " + _.padZeroes(hours) + ":" + _.padZeroes(minutes) + " " + a + " " + tz;
             },
             _updateTopBar: function updateTopBar(image) {
                 var timestamp = image.data("timestamp") || "";
@@ -746,7 +852,6 @@
                         that.$container.append($anchor);
                         var modal = new Modal({
                             anchor: $anchor,
-                            top: 200,
                             closeButton: $modalClose
                         });
                         modal.addListener("onComplete", that, that._modalCompleted);
@@ -801,10 +906,11 @@
                 this._preloadImages(imagePath, dataset).done(function() {
                     this._renderTopBar();
                     this._renderImages(dataset);
-                    this.carousel = new Carousel({
+                    var o = _.extend({
                         container: this.$container,
                         controlArea: ".iw-topbar"
-                    });
+                    }, this.descriptor.carouselOptions);
+                    this.carousel = new Carousel(o);
                     this.carousel.addListener("slideChanged", this, this._updateTopBar);
                     this.carousel.play();
                 });
@@ -815,7 +921,11 @@
                 defaultSequenceLength: 12,
                 pollInterval: 60,
                 pollDuration: 60 * 10,
-                poll: true
+                poll: true,
+                timeStampOptions: {
+                    timezone: "local",
+                    timeFormat: "twelve-hour"
+                }
             },
             destroy: function destroy() {
                 this.$container.empty();
@@ -841,7 +951,8 @@
                 }
                 function success() {
                     var remote = _.isObject(o.remote) ? o.remote : {};
-                    var descriptor = _.extend({}, o.local, remote);
+                    var local = o.local || {};
+                    var descriptor = _.extend(true, {}, remote, local);
                     var intelliWeather = new IntelliWeather({
                         container: $container,
                         descriptor: descriptor

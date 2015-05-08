@@ -28,7 +28,7 @@ var Carousel = (function() {
   _.extend(Carousel.prototype, {
     _createSpeedIndicators: function createSpeedIndicators($speedControl) {
       var defaultPauseTime = this.settings.pauseTime;
-      var percentage = defaultPauseTime * 0.20;
+      var percentage = defaultPauseTime * (this.settings.linearPercentage / 100);
       var speedIndicatorCount = this.settings.speedIndicatorCount;
       var middle = Math.floor(speedIndicatorCount / 2);
       var indicators = [];
@@ -184,7 +184,8 @@ var Carousel = (function() {
     _defaults: {
       firstTimeout: 750,
       lastTimeout: 1500,
-      pauseTime: 280,
+      pauseTime: 175,
+      linearPercentage: 30,
       startSlide: 0,
       displayPlaybackControls: true,
       displaySpeedControl: true,

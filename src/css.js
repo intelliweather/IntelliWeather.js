@@ -26,39 +26,38 @@ var css = (function() {
       right: '23px'
     },
     iwControls: {
-      paddingTop: '8px',
       textAlign: 'center',
       fontSize: '16px',
       textShadow: '2px 2px 6px black'
     },
     iwPrevious: {
       cursor: 'pointer',
-      padding: '8px',
+      padding: '5px',
       paddingLeft: '20px',
       paddingRight: '50px',
     },
     iwNext: {
       cursor: 'pointer',
-      padding: '8px',
+      padding: '5px',
       paddingLeft: '50px',
       paddingRight: '20px'
     },
     iwPausePlay: {
       cursor: 'pointer',
-      padding: '8px',
+      padding: '5px',
       paddingLeft: '50px',
       paddingRight: '50px'
     },
     iwMinus: {
       cursor: 'pointer',
-      padding: '8px'
+      padding: '5px'
     },
     iwSpeedIndicator: {
       padding: '5px'
     },
     iwPlus: {
       cursor: 'pointer',
-      padding: '8px'
+      padding: '5px'
     },
     overlay: {
       position: 'fixed',

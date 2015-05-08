@@ -14,6 +14,7 @@ var Carousel = (function() {
     this.timer = 0;
     this.listeners = {};
     this.state = 'paused';
+    this.hasLooped = false;
 
     this._setupControls();
 
@@ -165,14 +166,24 @@ var Carousel = (function() {
     _doTimer: function doTimer() {
       if (this.settings.pauseTime && this.settings.pauseTime > 0) {
         clearTimeout(this.timer);
+
+        var timeout = this.settings.pauseTime;
+        if (this.currentSlide === 0 && !this.hasLooped) {
+          timeout = this.settings.firstTimeout;
+        } else if (this.currentSlide === this.slides.length - 1) {
+          timeout = this.settings.lastTimeout;
+        }
+
         var that = this;
         this.timer = setTimeout(function() {
           that.next();
-        }, this.settings.pauseTime);
+        }, timeout);
       }
     },
 
     _defaults: {
+      firstTimeout: 750,
+      lastTimeout: 1500,
       pauseTime: 280,
       startSlide: 0,
       displayPlaybackControls: true,
@@ -202,6 +213,7 @@ var Carousel = (function() {
       this.currentSlide++;
       if (this.currentSlide >= this.slides.length) {
         this.currentSlide = 0;
+        this.hasLooped = true;
       }
       this.slides.css({ display: 'none' });
       var $slide = $(this.slides[this.currentSlide]);

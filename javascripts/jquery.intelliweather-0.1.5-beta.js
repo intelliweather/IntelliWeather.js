@@ -1,5 +1,5 @@
 /*!
- * IntelliWeather.js 0.1.4-beta
+ * IntelliWeather.js 0.1.5-beta
  * http://www.intelliweather.com
  * Copyright 2014 IntelliWeather, Inc.
  */
@@ -63,7 +63,7 @@
                 fontSize: "12px",
                 fontWeight: "bold",
                 width: "100%",
-                zIndex: "100",
+                zIndex: "101",
                 position: "absolute",
                 top: "0px",
                 padding: "8px",
@@ -77,39 +77,38 @@
                 right: "23px"
             },
             iwControls: {
-                paddingTop: "8px",
                 textAlign: "center",
                 fontSize: "16px",
                 textShadow: "2px 2px 6px black"
             },
             iwPrevious: {
                 cursor: "pointer",
-                padding: "8px",
+                padding: "5px",
                 paddingLeft: "20px",
                 paddingRight: "50px"
             },
             iwNext: {
                 cursor: "pointer",
-                padding: "8px",
+                padding: "5px",
                 paddingLeft: "50px",
                 paddingRight: "20px"
             },
             iwPausePlay: {
                 cursor: "pointer",
-                padding: "8px",
+                padding: "5px",
                 paddingLeft: "50px",
                 paddingRight: "50px"
             },
             iwMinus: {
                 cursor: "pointer",
-                padding: "8px"
+                padding: "5px"
             },
             iwSpeedIndicator: {
                 padding: "5px"
             },
             iwPlus: {
                 cursor: "pointer",
-                padding: "8px"
+                padding: "5px"
             },
             overlay: {
                 position: "fixed",
@@ -262,24 +261,36 @@
         function Carousel(o) {
             this.settings = _.extend({}, this._defaults, o);
             this.$container = this.settings.container;
-            this.slides = this.$container.find("img");
-            this.currentSlide = 0;
+            this.slides = this.$container.find("> img");
+            this.currentSlideIndex = 0;
             this.timer = 0;
             this.listeners = {};
             this.state = "paused";
-            this._setupControls();
-            this.currentSlide = this.settings.startSlide;
-            if (this.settings.startSlide < 0 || this.settings.startSlide >= this.slides.length) {
-                this.currentSlide = 0;
-            }
-            $(this.slides[this.currentSlide]).css({
-                display: "block"
+            this.hasLooped = false;
+            this.slides.each(function(index, slide) {
+                $(slide).css({
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    visibility: "hidden"
+                });
             });
+            this._setupControls();
+            this.currentSlideIndex = this.settings.startSlide;
+            if (this.settings.startSlide < 0 || this.settings.startSlide >= this.slides.length) {
+                this.currentSlideIndex = 0;
+            }
+            $(this.slides[this.currentSlideIndex]).css({
+                opacity: 1,
+                display: "block",
+                visibility: "visible"
+            });
+            this._stackSlides(this.slides[this.currentSlideIndex], this.slides[this.currentSlideIndex + 1], true);
         }
         _.extend(Carousel.prototype, {
             _createSpeedIndicators: function createSpeedIndicators($speedControl) {
                 var defaultPauseTime = this.settings.pauseTime;
-                var percentage = defaultPauseTime * .2;
+                var percentage = defaultPauseTime * (this.settings.linearPercentage / 100);
                 var speedIndicatorCount = this.settings.speedIndicatorCount;
                 var middle = Math.floor(speedIndicatorCount / 2);
                 var indicators = [];
@@ -376,18 +387,68 @@
                     }
                 }
             },
+            _transition: function transition(forward) {
+                var currentSlide, previousSlide;
+                currentSlide = this.slides[this.currentSlideIndex];
+                previousSlide = forward ? this.slides[this.currentSlideIndex - 1] : this.slides[this.currentSlideIndex + 1];
+                this._stackSlides(previousSlide, currentSlide, true);
+                $(currentSlide).css({
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    display: "block",
+                    opacity: 1,
+                    visibility: "visible"
+                });
+                $(previousSlide).animate({
+                    opacity: 0
+                }, 300);
+            },
             _doTimer: function doTimer() {
                 if (this.settings.pauseTime && this.settings.pauseTime > 0) {
                     clearTimeout(this.timer);
+                    var timeout = this.settings.pauseTime;
+                    if (this.currentSlideIndex === 0 && !this.hasLooped) {
+                        timeout = this.settings.firstTimeout;
+                    } else if (this.currentSlideIndex === this.slides.length - 1) {
+                        timeout = this.settings.lastTimeout;
+                    }
                     var that = this;
                     this.timer = setTimeout(function() {
                         that.next();
-                    }, this.settings.pauseTime);
+                    }, timeout);
                 }
             },
+            _stackSlides: function stackSlides(current, next, forward) {
+                var maxZ = 100;
+                $(current).css("zIndex", maxZ);
+                var i;
+                var z = maxZ - 2;
+                var length = this.slides.length;
+                if (forward) {
+                    for (i = this.currentSlideIndex + 1; i < length; i++) {
+                        $(this.slides[i]).css("zIndex", z--);
+                    }
+                    for (i = 0; i < this.currentSlideIndex; i++) {
+                        $(this.slides[i]).css("zIndex", z--);
+                    }
+                } else {
+                    for (i = this.currentSlideIndex - 1; i >= 0; i--) {
+                        $(this.slides[i]).css("zIndex", z--);
+                    }
+                    for (i = length - 1; i > this.currentSlideIndex; i--) {
+                        $(this.slides[i]).css("zIndex", z--);
+                    }
+                }
+                $(next).css("zIndex", maxZ - 1);
+            },
             _defaults: {
-                pauseTime: 280,
+                firstTimeout: 750,
+                lastTimeout: 1500,
+                pauseTime: 175,
+                linearPercentage: 30,
                 startSlide: 0,
+                slideMaxZ: 100,
                 displayPlaybackControls: true,
                 displaySpeedControl: true,
                 speedIndicatorCount: 5
@@ -396,35 +457,24 @@
                 clearTimeout(this.timer);
             },
             prev: function prev() {
-                this.currentSlide--;
-                if (this.currentSlide < 0) {
-                    this.currentSlide = this.slides.length - 1;
+                this.currentSlideIndex--;
+                if (this.currentSlideIndex < 0) {
+                    this.currentSlideIndex = this.slides.length - 1;
                 }
-                this.slides.css({
-                    display: "none"
-                });
-                var $slide = $(this.slides[this.currentSlide]);
-                $slide.css({
-                    display: "block"
-                });
-                this._fire("slideChanged", $slide);
+                this._transition(false);
+                this._fire("slideChanged", $(this.slides[this.currentSlideIndex]));
                 if (this.state === "play") {
                     this._doTimer();
                 }
             },
             next: function next() {
-                this.currentSlide++;
-                if (this.currentSlide >= this.slides.length) {
-                    this.currentSlide = 0;
+                this.currentSlideIndex++;
+                if (this.currentSlideIndex >= this.slides.length) {
+                    this.currentSlideIndex = 0;
+                    this.hasLooped = true;
                 }
-                this.slides.css({
-                    display: "none"
-                });
-                var $slide = $(this.slides[this.currentSlide]);
-                $slide.css({
-                    display: "block"
-                });
-                this._fire("slideChanged", $slide);
+                this._transition(true);
+                this._fire("slideChanged", $(this.slides[this.currentSlideIndex]));
                 if (this.state === "play") {
                     this._doTimer();
                 }
@@ -880,9 +930,6 @@
                     var $img = $("<img />").attr("id", image.id).attr("src", src);
                     $img.data("index", index);
                     $img.data("timestamp", new Date(image.time));
-                    $img.css({
-                        display: "none"
-                    });
                     $img.load(function() {
                         d.resolveWith(that);
                     });

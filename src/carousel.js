@@ -9,20 +9,37 @@ var Carousel = (function() {
   function Carousel(o) {
     this.settings = _.extend({}, this._defaults, o);
     this.$container = this.settings.container;
-    this.slides = this.$container.find('img');
-    this.currentSlide = 0;
+    this.slides = this.$container.find('> img');
+    this.currentSlideIndex = 0;
     this.timer = 0;
     this.listeners = {};
     this.state = 'paused';
     this.hasLooped = false;
 
+    this.slides.each(function(index, slide) {
+      $(slide).css({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        visibility: 'hidden'
+      });
+    });
+
     this._setupControls();
 
-    this.currentSlide = this.settings.startSlide;
+    this.currentSlideIndex = this.settings.startSlide;
     if(this.settings.startSlide < 0 || this.settings.startSlide >= this.slides.length) {
-      this.currentSlide = 0;
+      this.currentSlideIndex = 0;
     }
-    $(this.slides[this.currentSlide]).css({ display: 'block' });
+
+    $(this.slides[this.currentSlideIndex]).css({
+      opacity: 1,
+      display: 'block',
+      visibility: 'visible'
+    });
+
+    this._stackSlides(this.slides[this.currentSlideIndex],
+        this.slides[this.currentSlideIndex + 1], true);
   }
 
   _.extend(Carousel.prototype, {
@@ -163,14 +180,33 @@ var Carousel = (function() {
       }
     },
 
+    _transition: function transition(forward) {
+      var currentSlide, previousSlide;
+
+      currentSlide = this.slides[this.currentSlideIndex];
+      previousSlide = forward ? this.slides[this.currentSlideIndex - 1] : this.slides[this.currentSlideIndex + 1];
+
+      this._stackSlides(previousSlide, currentSlide, true);
+      $(currentSlide).css({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        display: 'block',
+        opacity: 1,
+        visibility: 'visible'
+      });
+
+      $(previousSlide).animate({opacity: 0}, 300);
+    },
+
     _doTimer: function doTimer() {
       if (this.settings.pauseTime && this.settings.pauseTime > 0) {
         clearTimeout(this.timer);
 
         var timeout = this.settings.pauseTime;
-        if (this.currentSlide === 0 && !this.hasLooped) {
+        if (this.currentSlideIndex === 0 && !this.hasLooped) {
           timeout = this.settings.firstTimeout;
-        } else if (this.currentSlide === this.slides.length - 1) {
+        } else if (this.currentSlideIndex === this.slides.length - 1) {
           timeout = this.settings.lastTimeout;
         }
 
@@ -181,12 +217,39 @@ var Carousel = (function() {
       }
     },
 
+    _stackSlides: function stackSlides(current, next, forward) {
+      var maxZ = 100;
+      $(current).css('zIndex', maxZ);
+
+      var i;
+      var z = maxZ - 2;
+      var length = this.slides.length;
+      if (forward) {
+        for (i = this.currentSlideIndex + 1; i < length; i++) {
+          $(this.slides[i]).css('zIndex', z--);
+        }
+        for (i = 0; i < this.currentSlideIndex; i++) {
+          $(this.slides[i]).css('zIndex', z--);
+        }
+      } else {
+        for (i = this.currentSlideIndex - 1; i >= 0; i--) {
+          $(this.slides[i]).css('zIndex', z--);
+        }
+        for (i = length - 1; i > this.currentSlideIndex; i--) {
+          $(this.slides[i]).css('zIndex', z--);
+        }
+      }
+
+      $(next).css('zIndex', maxZ - 1);
+    },
+
     _defaults: {
       firstTimeout: 750,
       lastTimeout: 1500,
       pauseTime: 175,
       linearPercentage: 30,
       startSlide: 0,
+      slideMaxZ: 100,
       displayPlaybackControls: true,
       displaySpeedControl: true,
       speedIndicatorCount: 5
@@ -197,29 +260,29 @@ var Carousel = (function() {
     },
 
     prev: function prev() {
-      this.currentSlide--;
-      if (this.currentSlide < 0) {
-        this.currentSlide = this.slides.length - 1;
+      this.currentSlideIndex--;
+      if (this.currentSlideIndex < 0) {
+        this.currentSlideIndex = this.slides.length - 1;
       }
-      this.slides.css({ display: 'none' });
-      var $slide = $(this.slides[this.currentSlide]);
-      $slide.css({ display: 'block' });
-      this._fire('slideChanged', $slide);
+
+      this._transition(false);
+
+      this._fire('slideChanged', $(this.slides[this.currentSlideIndex]));
       if (this.state === 'play') {
         this._doTimer();
       }
     },
 
     next: function next() {
-      this.currentSlide++;
-      if (this.currentSlide >= this.slides.length) {
-        this.currentSlide = 0;
+      this.currentSlideIndex++;
+      if (this.currentSlideIndex >= this.slides.length) {
+        this.currentSlideIndex = 0;
         this.hasLooped = true;
       }
-      this.slides.css({ display: 'none' });
-      var $slide = $(this.slides[this.currentSlide]);
-      $slide.css({ display: 'block' });
-      this._fire('slideChanged', $slide);
+
+      this._transition(true);
+
+      this._fire('slideChanged', $(this.slides[this.currentSlideIndex]));
       if (this.state === 'play') {
         this._doTimer();
       }

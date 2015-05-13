@@ -147,7 +147,6 @@ var IntelliWeather = (function() {
         var $img = $('<img />').attr('id', image.id).attr('src', src);
         $img.data('index', index);
         $img.data('timestamp', new Date(image.time));
-        $img.css({ display: 'none' });
         $img.load(function() {
           d.resolveWith(that);
         });

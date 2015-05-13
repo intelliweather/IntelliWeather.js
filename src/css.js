@@ -12,7 +12,7 @@ var css = (function() {
       fontSize: '12px',
       fontWeight: 'bold',
       width: '100%',
-      zIndex: '100',
+      zIndex: '101',
       position: 'absolute',
       top: '0px',
       padding: '8px',

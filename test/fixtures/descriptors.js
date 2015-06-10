@@ -89,5 +89,44 @@ fixtures.descriptors = {
         quality: 85
       }
     }
+  },
+  popupStill: {
+    channel: 55,
+    commands: {
+      crop: [
+        129,
+        405,
+        769,
+        885
+      ],
+      watermarks: [
+        '1_IntelliWeather'
+      ],
+      mode: 'max',
+      quality: 85
+    },
+    displayWidth: 180,
+    displayHeight: 140,
+    series: false,
+    expand: {
+      channel: 55,
+      displayWidth: 640,
+      displayHeight: 480,
+      series: false,
+      commands: {
+        crop: [
+          129,
+          405,
+          769,
+          885
+        ],
+        watermarks: [
+          '1_IntelliWeather'
+        ],
+        mode: 'max',
+        quality: 85
+      }
+    },
+    onclick: 'popup'
   }
 };

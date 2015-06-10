@@ -91,10 +91,10 @@ var IntelliWeather = (function() {
       var that = this;
       $.each(dataset.images, function(index, image) {
         var $image = that.$images[image.id];
-        if (that.descriptor.series && dataset.images.length > 1) {
+        if ((that.descriptor.series && dataset.images.length > 1) ||
+            !that.descriptor.expand) {
           that.$container.append($image);
-        }
-        else {
+        } else {
 
           var $modal = $('<div></div>').attr('id', 'modal-' + image.id).css(_.extend({}, css.modal, {
             width: that.descriptor.expand.displayWidth,

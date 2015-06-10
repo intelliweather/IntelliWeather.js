@@ -27,13 +27,16 @@
       <h4>Still Image with Popup Series via Remote Descriptor</h4>
       <div class="iw popupSeries remote">
       </div>
+      <h4>Still Image with Popup Still</h4>
+      <div class="iw popupStill local">
+      </div>
     </div>
 
     <!-- Test Fixtures -->
     <script src="fixtures/descriptors.js"></script>
 
     <script src="javascripts/jquery-2.1.3.min.js"></script>
-    <script src="javascripts/jquery.intelliweather-0.1.5-beta.min.js"></script>
+    <script src="javascripts/jquery.intelliweather-0.1.6-beta.min.js"></script>
     <script type="text/javascript">
     //<!--
       $(function(){
@@ -41,6 +44,7 @@
         $('.iw.series.local').intelliWeather({ local: fixtures.descriptors.series });
         $('.iw.popupSeries.custom-branding').intelliWeather({ local: fixtures.descriptors.customBrandingPopupSeries });
         $('.iw.popupSeries.remote').intelliWeather({ remote: 'https://gfx1.intelliweather.net/api/descriptors/5_nat_expand' });
+        $('.iw.popupStill.local').intelliWeather({ local: fixtures.descriptors.popupStill });
       });
     //-->
     </script>

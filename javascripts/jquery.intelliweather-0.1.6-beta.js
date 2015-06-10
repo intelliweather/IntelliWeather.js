@@ -1,5 +1,5 @@
 /*!
- * IntelliWeather.js 0.1.5-beta
+ * IntelliWeather.js 0.1.6-beta
  * http://www.intelliweather.com
  * Copyright 2014 IntelliWeather, Inc.
  */
@@ -766,7 +766,7 @@
             },
             _buildDataset: function buildDataset(channelMeta) {
                 var dataset = {
-                    description: channelMeta.description || "",
+                    description: this.descriptor.description || channelMeta.description || "",
                     width: channelMeta.width || 640,
                     height: channelMeta.height || 480,
                     format: channelMeta.format || "jpg"
@@ -883,7 +883,7 @@
                 var that = this;
                 $.each(dataset.images, function(index, image) {
                     var $image = that.$images[image.id];
-                    if (that.descriptor.series && dataset.images.length > 1) {
+                    if (that.descriptor.series && dataset.images.length > 1 || !that.descriptor.expand) {
                         that.$container.append($image);
                     } else {
                         var $modal = $("<div></div>").attr("id", "modal-" + image.id).css(_.extend({}, css.modal, {

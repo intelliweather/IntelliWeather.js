@@ -94,10 +94,10 @@ fixtures.descriptors = {
     channel: 55,
     commands: {
       crop: [
-        129,
-        405,
-        769,
-        885
+        2283,
+        1499,
+        3562,
+        2218
       ],
       watermarks: [
         '1_IntelliWeather'
@@ -110,15 +110,15 @@ fixtures.descriptors = {
     series: false,
     expand: {
       channel: 55,
-      displayWidth: 640,
-      displayHeight: 480,
+      displayWidth: 1280,
+      displayHeight: 720,
       series: false,
       commands: {
         crop: [
-          129,
-          405,
-          769,
-          885
+          2283,
+          1499,
+          3562,
+          2218
         ],
         watermarks: [
           '1_IntelliWeather'

@@ -11,7 +11,8 @@ fixtures.descriptors = {
         885
       ],
       watermarks: [
-        '1_IntelliWeather'
+        '1_IntelliWeather',
+        '1_Radar'
       ],
       mode: 'max',
       quality: 85
@@ -33,7 +34,8 @@ fixtures.descriptors = {
           885
         ],
         watermarks: [
-          '1_IntelliWeather'
+          '1_IntelliWeather',
+          '1_Radar'
         ],
         mode: 'max',
         quality: 85
@@ -45,7 +47,8 @@ fixtures.descriptors = {
     channel: 5,
     commands: {
       watermarks: [
-        '1_IntelliWeather'
+        '1_IntelliWeather',
+        '1_Radar'
       ],
       mode: 'max',
       quality: 85
@@ -59,7 +62,8 @@ fixtures.descriptors = {
     channel: 5,
     commands: {
       watermarks: [
-        '1_KPAY'
+        '1_KPAY',
+        '1_Radar'
       ],
       mode: "max",
       quality: 85
@@ -83,7 +87,8 @@ fixtures.descriptors = {
       seriesLength: 12,
       commands: {
         watermarks: [
-          '1_KPAY'
+          '1_KPAY',
+          '1_Radar'
         ],
         mode: 'max',
         quality: 85
@@ -100,7 +105,8 @@ fixtures.descriptors = {
         2218
       ],
       watermarks: [
-        '1_IntelliWeather'
+        '1_IntelliWeather',
+        '1_Radar'
       ],
       mode: 'max',
       quality: 85
@@ -121,7 +127,8 @@ fixtures.descriptors = {
           2218
         ],
         watermarks: [
-          '1_IntelliWeather'
+          '1_IntelliWeather',
+          '1_Radar'
         ],
         mode: 'max',
         quality: 85

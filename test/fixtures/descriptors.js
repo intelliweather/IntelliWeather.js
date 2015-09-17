@@ -10,8 +10,9 @@ fixtures.descriptors = {
         769,
         885
       ],
-      watermarks: [
-        '1_IntelliWeather'
+      layers: [
+        '1_IntelliWeather',
+        '1_Radar'
       ],
       mode: 'max',
       quality: 85
@@ -32,8 +33,9 @@ fixtures.descriptors = {
           769,
           885
         ],
-        watermarks: [
-          '1_IntelliWeather'
+        layers: [
+          '1_IntelliWeather',
+          '1_Radar'
         ],
         mode: 'max',
         quality: 85
@@ -44,8 +46,9 @@ fixtures.descriptors = {
   series: {
     channel: 5,
     commands: {
-      watermarks: [
-        '1_IntelliWeather'
+      layers: [
+        '1_IntelliWeather',
+        '1_Radar'
       ],
       mode: 'max',
       quality: 85
@@ -58,8 +61,9 @@ fixtures.descriptors = {
   customBrandingPopupSeries: {
     channel: 5,
     commands: {
-      watermarks: [
-        '1_KPAY'
+      layers: [
+        '1_KPAY',
+        '1_Radar'
       ],
       mode: "max",
       quality: 85
@@ -82,8 +86,9 @@ fixtures.descriptors = {
       series: true,
       seriesLength: 12,
       commands: {
-        watermarks: [
-          '1_KPAY'
+        layers: [
+          '1_KPAY',
+          '1_Radar'
         ],
         mode: 'max',
         quality: 85
@@ -99,8 +104,9 @@ fixtures.descriptors = {
         3562,
         2218
       ],
-      watermarks: [
-        '1_IntelliWeather'
+      layers: [
+        '1_IntelliWeather',
+        '1_Radar'
       ],
       mode: 'max',
       quality: 85
@@ -120,8 +126,9 @@ fixtures.descriptors = {
           3562,
           2218
         ],
-        watermarks: [
-          '1_IntelliWeather'
+        layers: [
+          '1_IntelliWeather',
+          '1_Radar'
         ],
         mode: 'max',
         quality: 85

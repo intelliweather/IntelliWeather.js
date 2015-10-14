@@ -1,5 +1,5 @@
 /*!
- * IntelliWeather.js 0.1.6-beta
+ * IntelliWeather.js 0.1.7-beta
  * http://www.intelliweather.com
  * Copyright 2014 IntelliWeather, Inc.
  */
@@ -916,6 +916,7 @@
                     this.$labelFrame = $(html.labelFrame).appendTo(this.$topbar);
                     this.$labelTime = $(html.labelTime).appendTo(this.$topbar).css(css.iwTime);
                 } else {
+                    this.$seriesTitle = $(html.seriesTitle).appendTo(this.$topbar);
                     this.$labelTime = $(html.labelTime).appendTo(this.$topbar).css(css.iwTime);
                 }
                 this.$container.append(this.$topbar);

@@ -130,6 +130,7 @@ var IntelliWeather = (function() {
         this.$labelFrame = $(html.labelFrame).appendTo(this.$topbar);
         this.$labelTime = $(html.labelTime).appendTo(this.$topbar).css(css.iwTime);
       } else {
+        this.$seriesTitle = $(html.seriesTitle).appendTo(this.$topbar);
         this.$labelTime = $(html.labelTime).appendTo(this.$topbar).css(css.iwTime);
       }
 

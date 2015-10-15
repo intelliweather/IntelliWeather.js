@@ -1,5 +1,5 @@
 /*!
- * IntelliWeather.js 0.1.7-beta
+ * IntelliWeather.js 0.1.8-beta
  * http://www.intelliweather.com
  * Copyright 2014 IntelliWeather, Inc.
  */
@@ -765,8 +765,12 @@
                 this._schedule();
             },
             _buildDataset: function buildDataset(channelMeta) {
+                var description = this.descriptor.description;
+                if (description == null) {
+                    description = channelMeta.description;
+                }
                 var dataset = {
-                    description: this.descriptor.description || channelMeta.description || "",
+                    description: description || "",
                     width: channelMeta.width || 640,
                     height: channelMeta.height || 480,
                     format: channelMeta.format || "jpg"

@@ -3,6 +3,7 @@ var fixtures = fixtures || {};
 fixtures.descriptors = {
   popupSeries: {
     channel: 2,
+    description: '',
     commands: {
       crop: [
         129,
@@ -97,6 +98,7 @@ fixtures.descriptors = {
   },
   popupStill: {
     channel: 55,
+    description: '',
     commands: {
       crop: [
         2283,

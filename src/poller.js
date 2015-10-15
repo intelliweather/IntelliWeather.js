@@ -85,8 +85,12 @@ var Poller = (function() {
     },
 
     _buildDataset: function buildDataset(channelMeta) {
+      var description = this.descriptor.description;
+      if (description == null) {
+        description = channelMeta.description;
+      }
       var dataset = {
-        description: this.descriptor.description || channelMeta.description || '',
+        description: description || '',
         width: channelMeta.width || 640,
         height: channelMeta.height || 480,
         format: channelMeta.format || 'jpg'

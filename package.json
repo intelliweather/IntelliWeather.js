@@ -5,7 +5,7 @@
     "name": "IntelliWeather, Inc.",
     "url": "http://www.intelliweather.com"
   },
-  "version": "0.1.7-beta",
+  "version": "0.1.8-beta",
   "devDependencies": {
     "browser-sync": "^2.2.1",
     "del": "^1.1.1",

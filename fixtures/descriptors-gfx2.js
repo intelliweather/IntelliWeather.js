@@ -2,6 +2,7 @@ var fixtures = fixtures || {};
 
 fixtures.descriptors = {
   popupSeries: {
+    imageHost: 'https://gfx2.intelliweather.net',
     channel: 2,
     description: '',
     commands: {
@@ -45,6 +46,7 @@ fixtures.descriptors = {
     onclick: 'popup'
   },
   series: {
+    imageHost: 'https://gfx2.intelliweather.net',
     channel: 5,
     commands: {
       layers: [
@@ -60,6 +62,7 @@ fixtures.descriptors = {
     seriesLength: 12
   },
   customBrandingPopupSeries: {
+    imageHost: 'https://gfx2.intelliweather.net',
     channel: 5,
     commands: {
       layers: [
@@ -97,6 +100,7 @@ fixtures.descriptors = {
     }
   },
   popupStill: {
+    imageHost: 'https://gfx2.intelliweather.net',
     channel: 55,
     description: '',
     commands: {

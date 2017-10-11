@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GFX1 - Playground - IntelliWeather</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="stylesheets/normalize.css">
+    <link rel="stylesheet" href="stylesheets/screen.css">
+  </head>
+  <body>
+    <div>
+      <h3>Playground</h3>
+      <p>An integration test environment for different descriptor configurations.</p>
+    </div>
+    <div>
+      <h4>Still Image with Popup Series</h4>
+      <div class="iw popupSeries local">
+      </div>
+      <h4>Inline Series</h4>
+      <div class="iw series local">
+      </div>
+      <h4>Still Image with Popup Series with Custom Branding</h4>
+      <div class="iw popupSeries custom-branding">
+      </div>
+      <h4>Still Image with Popup Series via Remote Descriptor</h4>
+      <div class="iw popupSeries remote">
+      </div>
+      <h4>Still Image with Popup Still</h4>
+      <div class="iw popupStill local">
+      </div>
+    </div>
+
+    <!-- Test Fixtures -->
+    <script src="fixtures/descriptors-gfx1.js"></script>
+
+    <script src="javascripts/jquery-2.1.3.min.js"></script>
+    <script src="javascripts/jquery.intelliweather-0.1.8-beta.min.js"></script>
+    <script type="text/javascript">
+    //<!--
+      $(function(){
+        $('.iw.popupSeries.local').intelliWeather({ local: fixtures.descriptors.popupSeries });
+        $('.iw.series.local').intelliWeather({ local: fixtures.descriptors.series });
+        $('.iw.popupSeries.custom-branding').intelliWeather({ local: fixtures.descriptors.customBrandingPopupSeries });
+        $('.iw.popupSeries.remote').intelliWeather({ remote: 'https://gfx1.intelliweather.net/api/descriptors/5_nat_expand' });
+        $('.iw.popupStill.local').intelliWeather({ local: fixtures.descriptors.popupStill });
+      });
+    //-->
+    </script>
+  </body>
+</html>
